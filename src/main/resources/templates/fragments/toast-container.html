@@ -1,0 +1,8 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+<!--/* Live region for success / error toasts created by js/core/ui.js. Flash messages from redirects are read from data-flash. */-->
+<div th:fragment="toasts" class="toast-region" id="toast-region" role="status" aria-live="polite"
+     th:attr="data-flash=${flash}"></div>
+</body>
+</html>

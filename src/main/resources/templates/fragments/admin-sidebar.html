@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+<!--/* Administrator navigation. Counts come from GlobalModelAdvice (adminCounts). */-->
+<aside th:fragment="sidebar" class="sidebar sidebar--admin" aria-label="Admin navigation">
+    <div class="sidebar__profile">
+        <span th:replace="~{fragments/ui :: avatar(${currentUser}, '')}"></span>
+        <div><strong th:text="${currentUser.fullName}">Administrator</strong><span>Administrator</span></div>
+    </div>
+    <nav>
+        <div class="sidebar__group">
+        <a class="sidebar__link" th:classappend="${activeSection == 'overview'} ? 'is-active'" th:href="@{/admin}" th:attr="aria-current=${activeSection == 'overview'} ? 'page' : null"><svg th:replace="~{fragments/ui :: icon('chart-column', '')}"></svg>Overview</a>
+        </div><div class="sidebar__group"><p class="sidebar__label">Approvals</p>
+        <a class="sidebar__link" th:classappend="${activeSection == 'pending-users'} ? 'is-active'" th:href="@{/admin/pending-users}" th:attr="aria-current=${activeSection == 'pending-users'} ? 'page' : null"><svg th:replace="~{fragments/ui :: icon('user-plus', '')}"></svg>Pending registrations<span class="sidebar__count" th:if="${adminCounts.pendingUsers > 0}" th:text="${adminCounts.pendingUsers}">0</span></a>
+        <a class="sidebar__link" th:classappend="${activeSection == 'pending-listings'} ? 'is-active'" th:href="@{/admin/pending-listings}" th:attr="aria-current=${activeSection == 'pending-listings'} ? 'page' : null"><svg th:replace="~{fragments/ui :: icon('package-plus', '')}"></svg>Pending listings<span class="sidebar__count" th:if="${adminCounts.pendingListings > 0}" th:text="${adminCounts.pendingListings}">0</span></a>
+        </div><div class="sidebar__group"><p class="sidebar__label">Manage</p>
+        <a class="sidebar__link" th:classappend="${activeSection == 'users'} ? 'is-active'" th:href="@{/admin/users}" th:attr="aria-current=${activeSection == 'users'} ? 'page' : null"><svg th:replace="~{fragments/ui :: icon('users', '')}"></svg>All users</a>
+        <a class="sidebar__link" th:classappend="${activeSection == 'listings'} ? 'is-active'" th:href="@{/admin/listings}" th:attr="aria-current=${activeSection == 'listings'} ? 'page' : null"><svg th:replace="~{fragments/ui :: icon('package', '')}"></svg>All listings</a>
+        <a class="sidebar__link" th:classappend="${activeSection == 'exchanges'} ? 'is-active'" th:href="@{/admin/exchanges}" th:attr="aria-current=${activeSection == 'exchanges'} ? 'page' : null"><svg th:replace="~{fragments/ui :: icon('arrow-left-right', '')}"></svg>Exchanges</a>
+        <a class="sidebar__link" th:classappend="${activeSection == 'reports'} ? 'is-active'" th:href="@{/admin/reports}" th:attr="aria-current=${activeSection == 'reports'} ? 'page' : null"><svg th:replace="~{fragments/ui :: icon('flag', '')}"></svg>Reports<span class="sidebar__count" th:if="${adminCounts.openReports > 0}" th:text="${adminCounts.openReports}">0</span></a>
+        <a class="sidebar__link" th:classappend="${activeSection == 'support'} ? 'is-active'" th:href="@{/admin/support}" th:attr="aria-current=${activeSection == 'support'} ? 'page' : null"><svg th:replace="~{fragments/ui :: icon('life-buoy', '')}"></svg>Support tickets<span class="sidebar__count" th:if="${adminCounts.openTickets > 0}" th:text="${adminCounts.openTickets}">0</span></a>
+        <a class="sidebar__link" th:classappend="${activeSection == 'categories'} ? 'is-active'" th:href="@{/admin/categories}" th:attr="aria-current=${activeSection == 'categories'} ? 'page' : null"><svg th:replace="~{fragments/ui :: icon('folder-tree', '')}"></svg>Categories</a>
+        <a class="sidebar__link" th:classappend="${activeSection == 'audit'} ? 'is-active'" th:href="@{/admin/audit-logs}" th:attr="aria-current=${activeSection == 'audit'} ? 'page' : null"><svg th:replace="~{fragments/ui :: icon('scroll-text', '')}"></svg>Audit logs</a>
+        </div><div class="sidebar__group">
+        <a class="sidebar__link" th:classappend="${activeSection == 'site'} ? 'is-active'" th:href="@{/}" th:attr="aria-current=${activeSection == 'site'} ? 'page' : null"><svg th:replace="~{fragments/ui :: icon('house', '')}"></svg>View public site</a>
+        </div>
+    </nav>
+</aside>
+</body>
+</html>

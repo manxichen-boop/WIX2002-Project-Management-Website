@@ -1,0 +1,35 @@
+# Render Blueprint: Render dashboard → New → Blueprint → pick this repository.
+# Free web service (sleeps after 15 minutes without visitors). Photos are stored in MySQL
+# (ECOSWAP_STORAGE_TYPE=database) because the free plan's disk is wiped on every restart.
+# Values marked "sync: false" are asked for once in the dashboard; they never live in git.
+services:
+  - type: web
+    name: ecoswap
+    runtime: docker
+    plan: free
+    healthCheckPath: /
+    envVars:
+      - key: SPRING_PROFILES_ACTIVE
+        value: prod
+      - key: ECOSWAP_STORAGE_TYPE
+        value: database
+      - key: DB_URL            # jdbc:mysql://HOST:PORT/defaultdb?sslMode=REQUIRED&serverTimezone=UTC&characterEncoding=utf8
+        sync: false
+      - key: DB_USERNAME
+        sync: false
+      - key: DB_PASSWORD
+        sync: false
+      - key: DB_POOL_SIZE
+        value: "5"
+      - key: ECOSWAP_ADMIN_EMAIL
+        sync: false
+      - key: ECOSWAP_ADMIN_PASSWORD
+        sync: false
+      - key: ECOSWAP_ADMIN_NAME
+        value: Eco Swape Administrator
+      - key: ECOSWAP_REMEMBER_ME_KEY
+        generateValue: true
+      - key: ECOSWAP_TIME_ZONE
+        value: Asia/Kuala_Lumpur
+      - key: JAVA_OPTS
+        value: "-XX:MaxRAMPercentage=60 -XX:MaxMetaspaceSize=170m -XX:+UseSerialGC -Xss512k -XX:TieredStopAtLevel=1"

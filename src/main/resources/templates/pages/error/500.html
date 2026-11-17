@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{layout/base :: layout(~{::title}, 'public', '', ~{::main})}">
+<head><title>Eco Swape · 500</title></head>
+<body>
+<main id="main" class="container error-page">
+    <span class="error-page__code" aria-hidden="true">500</span>
+    <h1>Something went wrong on our side</h1>
+    <p>We've logged the problem. Please try again in a moment.</p>
+    <div class="cluster">
+        <a class="btn btn--primary" th:href="@{/}"><svg th:replace="~{fragments/ui :: icon('house', '')}"></svg>Back to home</a>
+        <a class="btn btn--secondary" th:href="@{/explore}">Explore items</a>
+    </div>
+</main>
+</body>
+</html>

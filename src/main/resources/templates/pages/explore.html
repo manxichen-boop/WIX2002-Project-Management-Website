@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{layout/base :: layout(~{::title}, 'public', 'explore', ~{::main})}">
+<head><title>Explore items · Eco Swape</title></head>
+<body>
+<main id="main" class="container page">
+    <header class="page-hero" style="padding-top:12px">
+        <span class="eyebrow">Explore items</span>
+        <h1>Pre-loved finds from your campus</h1>
+        <p>Every listing here has been approved and is free to request: swap one of your items, or ask for a giveaway or upcycling material.</p>
+        <a class="btn btn--secondary" th:href="@{/pickup-map}" style="margin-top:14px"><svg th:replace="~{fragments/ui :: icon('map', '')}"></svg>Find pickup points on the map</a>
+    </header>
+
+    <div class="explore">
+        <form class="card filters" id="filters" aria-label="Filters">
+            <div class="spread"><h2>Filters</h2>
+                <button class="btn btn--ghost btn--sm filter-toggle" type="button" data-close-filters aria-label="Close filters"><svg th:replace="~{fragments/ui :: icon('x', '')}"></svg></button></div>
+            <div class="field">
+                <label for="f-category">Category</label>
+                <select class="select" id="f-category" name="category">
+                    <option value="">All categories</option>
+                    <option th:each="c : ${navCategories}" th:value="${c.slug}" th:text="${c.name}">Books</option>
+                </select>
+            </div>
+            <fieldset class="field" style="border:0;padding:0;margin:0">
+                <legend class="field__label" style="margin-bottom:8px">Listing type</legend>
+                <div class="cluster">
+                    <button class="chip" type="button" data-type="" aria-pressed="true">All</button>
+                    <button class="chip" type="button" th:each="t : ${listingTypes}" th:attr="data-type=${t.name()}" aria-pressed="false" th:text="${t.label()}">Swap</button>
+                </div>
+            </fieldset>
+            <div class="field">
+                <label for="f-condition">Condition</label>
+                <select class="select" id="f-condition" name="condition">
+                    <option value="">Any condition</option>
+                    <option th:each="c : ${conditions}" th:value="${c.name()}" th:text="${c.label()}">Good</option>
+                </select>
+            </div>
+            <div class="field">
+                <label for="f-location">Pickup location</label>
+                <div class="input-wrap">
+                    <svg th:replace="~{fragments/ui :: icon('map-pin', '')}"></svg>
+                    <input class="input" id="f-location" name="location" maxlength="80" placeholder="e.g. Library, KK8">
+                </div>
+            </div>
+            <div class="filters__actions">
+                <button class="btn btn--primary btn--sm" type="submit" style="flex:1">Apply</button>
+                <button class="btn btn--secondary btn--sm" type="button" data-reset>Reset</button>
+            </div>
+        </form>
+
+        <section aria-labelledby="results-title">
+            <h2 id="results-title" class="sr-only">Results</h2>
+            <div class="explore__bar">
+                <div class="input-wrap">
+                    <svg th:replace="~{fragments/ui :: icon('search', '')}"></svg>
+                    <label class="sr-only" for="q">Search items</label>
+                    <input class="input" id="q" type="search" maxlength="80" placeholder="Search books, calculators, chairs…" autocomplete="off">
+                </div>
+                <label class="sr-only" for="sort">Sort</label>
+                <select class="select" id="sort" style="width:auto">
+                    <option value="newest">Newest first</option>
+                    <option value="oldest">Oldest first</option>
+                    <option value="name">Name A–Z</option>
+                </select>
+                <button class="btn btn--secondary filter-toggle" type="button" data-open-filters><svg th:replace="~{fragments/ui :: icon('sliders-horizontal', '')}"></svg>Filters</button>
+            </div>
+            <p class="explore__count" id="result-count" aria-live="polite"></p>
+            <div class="item-grid" id="results"></div>
+            <div id="pager"></div>
+        </section>
+    </div>
+</main>
+</body>
+</html>

@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+<footer th:fragment="footer" class="site-footer">
+    <div class="container">
+        <div class="site-footer__grid">
+            <div>
+                <a th:replace="~{fragments/ui :: brand}"></a>
+                <p class="site-footer__about">A free campus community exchange. Swap, give away and upcycle pre-loved items, reduce waste and build a more sustainable campus together. No buying, no selling.</p>
+            </div>
+            <div>
+                <h2>Explore</h2>
+                <ul>
+                    <li><a th:href="@{/explore}">All items</a></li>
+                    <li><a th:href="@{/explore(type='SWAP')}">Swaps</a></li>
+                    <li><a th:href="@{/explore(type='GIVEAWAY')}">Giveaways</a></li>
+                    <li><a th:href="@{/explore(type='UPCYCLING')}">Upcycling materials</a></li>
+                </ul>
+            </div>
+            <div>
+                <h2>Platform</h2>
+                <ul>
+                    <li><a th:href="@{/how-it-works}">How it works</a></li>
+                    <li><a th:href="@{/community}">Community</a></li>
+                    <li><a th:href="@{/impact}">Impact</a></li>
+                    <li><a th:href="@{/how-it-works} + '#guidelines'">Community guidelines</a></li>
+                </ul>
+            </div>
+            <div>
+                <h2>Account</h2>
+                <ul th:if="${currentUser == null}">
+                    <li><a th:href="@{/register}">Join Eco Swape</a></li>
+                    <li><a th:href="@{/login}">Log in</a></li>
+                    <li><a th:href="@{/forgot-password}">Forgot password</a></li>
+                </ul>
+                <ul th:if="${currentUser != null}">
+                    <li th:unless="${currentUser.admin}"><a th:href="@{/dashboard}">Dashboard</a></li>
+                    <li th:if="${currentUser.admin}"><a th:href="@{/admin}">Admin dashboard</a></li>
+                    <li><a th:href="@{/profile}">My profile</a></li>
+                    <li th:unless="${currentUser.admin}"><a th:href="@{/support}">Help &amp; support</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="site-footer__bottom">
+            <span>&copy; <span th:text="${currentYear}">2026</span> Eco Swape. Free for every student, always.</span>
+            <span class="site-footer__script">Reuse Today for a Greener Tomorrow</span>
+        </div>
+    </div>
+</footer>
+</body>
+</html>

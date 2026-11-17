@@ -1,0 +1,12 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{layout/base :: layout(~{::title}, ${shell}, 'notifications', ~{::main})}">
+<head><title>Notifications · Eco Swape</title></head>
+<body>
+<main id="main" class="app-main">
+    <div class="page-head"><div><h1>Notifications</h1><p>Updates about your account, listings and exchanges.</p></div><div class="page-head__actions"><button class="btn btn--secondary" type="button" data-read-all><svg th:replace="~{fragments/ui :: icon('check-check', '')}"></svg>Mark all as read</button></div></div>
+    <div class="tabs" role="tablist" style="margin-bottom:18px"><button class="tab" role="tab" type="button" data-status="all" aria-selected="true">All</button><button class="tab" role="tab" type="button" data-status="unread" aria-selected="false">Unread</button></div>
+    <div class="card" id="rows" aria-live="polite"></div><div id="pager"></div>
+</main>
+</body>
+</html>

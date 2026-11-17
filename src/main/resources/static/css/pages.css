@@ -1,0 +1,104 @@
+/* ==========================================================================
+   Shared page styles: auth screens, explore, item details, static content
+   pages (how it works, community, impact), support, profile, errors.
+   ========================================================================== */
+
+.page { padding-block: 36px 80px; }
+.page-hero { padding-block: 40px 28px; }
+.page-hero h1 { font-size: var(--text-3xl); max-width: 20ch; }
+.page-hero p { margin-top: 12px; color: var(--color-text-secondary); font-size: var(--text-md); max-width: 60ch; }
+
+/* ---------- Auth ---------- */
+.auth { display: grid; grid-template-columns: 1fr 1fr; min-height: calc(100vh - var(--header-h) - 20px); align-items: center; gap: clamp(24px, 4vw, 64px); padding-block: 32px 64px; }
+.auth__card { width: 100%; max-width: 500px; justify-self: center; padding: clamp(24px, 3.5vw, 40px); }
+.auth__card h1 { font-size: var(--text-2xl); }
+.auth__card > p { margin-top: 8px; color: var(--color-text-secondary); }
+.auth__card .form { margin-top: 26px; }
+.auth__switch { margin-top: 22px; text-align: center; font-size: var(--text-sm); color: var(--color-text-secondary); }
+.auth__art { position: relative; border-radius: var(--radius-xl); overflow: hidden; background: radial-gradient(circle at 50% 45%, var(--color-lime-soft), var(--color-ivory) 70%); aspect-ratio: 860 / 625; }
+.auth__art img { width: 100%; height: 100%; object-fit: contain;
+    /* the scene is shared with the homepage, where category cards sit on its edges: fade the edges out here */
+    -webkit-mask-image: radial-gradient(ellipse 58% 62% at 52% 60%, #000 72%, transparent 100%);
+            mask-image: radial-gradient(ellipse 58% 62% at 52% 60%, #000 72%, transparent 100%); }
+.auth__quote { position: absolute; left: 28px; top: 22px; font-family: var(--font-script); font-size: 1.9rem; line-height: 1.1; color: var(--color-forest); transform: rotate(-4deg); }
+.status-panel { max-width: 620px; margin: 40px auto 80px; padding: clamp(28px, 4vw, 48px); text-align: center; }
+.status-panel .state__icon { margin: 0 auto 18px; width: 76px; height: 76px; border-radius: 26px; }
+.status-panel h1 { font-size: var(--text-2xl); }
+.status-panel p { margin-top: 12px; color: var(--color-text-secondary); }
+.status-panel .cluster { justify-content: center; margin-top: 24px; }
+.timeline { list-style: none; display: grid; gap: 12px; margin: 26px auto 0; max-width: 420px; text-align: left; }
+.timeline li { display: flex; gap: 12px; align-items: flex-start; font-size: var(--text-sm); }
+.timeline li .icon { color: var(--color-action); margin-top: 2px; }
+.timeline li.is-pending .icon { color: var(--color-muted); }
+
+/* ---------- Explore ---------- */
+.explore { display: grid; grid-template-columns: 280px minmax(0, 1fr); gap: 28px; align-items: start; }
+.filters { position: sticky; top: calc(var(--header-h) + 36px); padding: 22px; display: grid; gap: 18px; }
+.filters h2 { font-size: var(--text-lg); }
+.filters__actions { display: flex; gap: 8px; }
+.explore__bar { display: flex; gap: 12px; align-items: center; flex-wrap: wrap; margin-bottom: 20px; }
+.explore__bar .input-wrap { flex: 1 1 280px; }
+.explore__count { font-size: var(--text-sm); color: var(--color-text-secondary); margin-bottom: 14px; }
+.filter-toggle { display: none; }
+
+/* ---------- Item details ---------- */
+.item-detail { display: grid; grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr); gap: clamp(24px, 4vw, 48px); align-items: start; }
+.gallery { display: grid; gap: 12px; }
+.gallery__main { aspect-ratio: 4 / 3; border-radius: var(--radius-lg); overflow: hidden; background: var(--color-forest-soft); border: 1px solid var(--color-border); }
+.gallery__main img { width: 100%; height: 100%; object-fit: cover; }
+.gallery__thumbs { display: flex; gap: 10px; overflow-x: auto; padding-bottom: 4px; }
+.gallery__thumbs button { width: 82px; height: 82px; flex: none; border-radius: var(--radius-sm); overflow: hidden; border: 2px solid transparent; opacity: .75; }
+.gallery__thumbs button[aria-current="true"] { border-color: var(--color-action); opacity: 1; }
+.gallery__thumbs img { width: 100%; height: 100%; object-fit: cover; }
+.item-info { display: grid; gap: 18px; }
+.item-info h1 { font-size: var(--text-2xl); }
+.item-info__desc { white-space: pre-wrap; color: var(--color-text); }
+.item-facts { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.fact { padding: 14px; border-radius: var(--radius-md); background: var(--color-cream); border: 1px solid var(--color-border); }
+.fact span { display: block; font-size: var(--text-xs); color: var(--color-text-secondary); }
+.fact strong { font-family: var(--font-heading); color: var(--color-forest); }
+.owner-card { display: flex; align-items: center; gap: 14px; padding: 16px; }
+.owner-card strong { font-family: var(--font-heading); color: var(--color-forest); display: block; }
+.owner-card span { font-size: var(--text-sm); color: var(--color-text-secondary); }
+.item-actions { display: grid; gap: 10px; }
+.item-actions__row { display: flex; gap: 10px; }
+.item-actions__row .btn { flex: 1; }
+.offer-list { display: grid; gap: 10px; max-height: 320px; overflow-y: auto; }
+.offer-option { display: flex; align-items: center; gap: 12px; padding: 10px; border: 1.5px solid var(--color-border-strong); border-radius: var(--radius-md); cursor: pointer; background: var(--color-white); }
+.offer-option:has(input:checked) { border-color: var(--color-action); background: var(--color-lime-faint); }
+.offer-option input { accent-color: var(--color-action); }
+.offer-option img, .offer-option .media-cell__ph { width: 52px; height: 52px; border-radius: 12px; object-fit: cover; }
+
+/* ---------- Content pages ---------- */
+.prose { max-width: 72ch; }
+.prose h2 { font-size: var(--text-xl); margin: 32px 0 10px; }
+.prose p, .prose li { color: var(--color-text-secondary); }
+.prose p + p { margin-top: 12px; }
+.prose ul { padding-left: 20px; display: grid; gap: 6px; margin-top: 10px; }
+.metric-hero { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
+.metric { padding: 22px; border-radius: var(--radius-lg); background: var(--color-cream); border: 1px solid var(--color-border); }
+.metric strong { display: block; font-family: var(--font-heading); font-size: 2rem; font-weight: 800; color: var(--color-forest); }
+.metric span { font-size: var(--text-sm); color: var(--color-text-secondary); }
+.split { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+.bar-list { list-style: none; display: grid; gap: 12px; }
+.bar-list li { display: grid; gap: 6px; font-size: var(--text-sm); }
+.bar-list__track { height: 10px; border-radius: 5px; background: #ECEEE4; overflow: hidden; }
+.bar-list__fill { height: 100%; border-radius: 5px; background: var(--color-action); }
+
+/* ---------- Support ---------- */
+.support-layout { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; align-items: start; }
+.ticket-list { display: grid; gap: 10px; }
+.ticket { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 14px 16px; border: 1px solid var(--color-border); border-radius: var(--radius-md); background: var(--color-white); width: 100%; text-align: left; }
+.ticket:hover { border-color: var(--color-border-strong); }
+.ticket strong { display: block; color: var(--color-forest); }
+.ticket span { font-size: var(--text-xs); color: var(--color-text-secondary); }
+
+/* ---------- Profile ---------- */
+.profile-head { display: flex; align-items: center; gap: 20px; flex-wrap: wrap; }
+.profile-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; align-items: start; }
+
+/* ---------- Errors ---------- */
+.error-page { min-height: 62vh; display: grid; place-content: center; justify-items: center; gap: 14px; text-align: center; padding-block: 80px; }
+.error-page__code { font-family: var(--font-heading); font-size: clamp(4rem, 12vw, 7rem); font-weight: 800; line-height: 1; color: var(--color-lime); }
+.error-page h1 { font-size: var(--text-2xl); max-width: 24ch; }
+.error-page p { color: var(--color-text-secondary); max-width: 46ch; }

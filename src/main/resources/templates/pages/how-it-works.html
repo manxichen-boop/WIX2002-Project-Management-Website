@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{layout/base :: layout(~{::title}, 'public', '', ~{::main})}">
+<head><title>How it works · Eco Swape</title></head>
+<body>
+<main id="main" class="page">
+    <div class="container">
+        <header class="page-hero">
+            <span class="eyebrow">How it works</span>
+            <h1>Free, simple and safe exchanges between students</h1>
+            <p>Eco Swape connects students on the same campus so useful things are reused instead of thrown away. Nothing is ever bought or sold.</p>
+        </header>
+        <ol class="steps">
+            <li class="step"><span class="step__num">01</span><span class="step__icon"><svg th:replace="~{fragments/ui :: icon('user-plus', '')}"></svg></span>
+                <h3>Join and get approved</h3><p>Register with your university e-mail and confirm it. An administrator approves new accounts so the community stays campus-only.</p></li>
+            <li class="step"><span class="step__num">02</span><span class="step__icon"><svg th:replace="~{fragments/ui :: icon('package-plus', '')}"></svg></span>
+                <h3>Post with photos</h3><p>Choose Swap, Giveaway or Upcycling, add 1–6 photos, the condition and a pickup spot. An admin reviews it before it appears in Explore.</p></li>
+            <li class="step"><span class="step__num">03</span><span class="step__icon"><svg th:replace="~{fragments/ui :: icon('send', '')}"></svg></span>
+                <h3>Request and accept</h3><p>For swaps you offer one of your approved items. When the owner accepts, both items are reserved and you can see each other's e-mail.</p></li>
+            <li class="step"><span class="step__num">04</span><span class="step__icon"><svg th:replace="~{fragments/ui :: icon('handshake', '')}"></svg></span>
+                <h3>Hand over and confirm</h3><p>Meet at the pickup location. Both of you confirm the handover, and the exchange counts towards campus impact.</p></li>
+        </ol>
+        <div class="listing-types">
+            <div class="listing-type"><svg th:replace="~{fragments/ui :: icon('repeat', '')}"></svg><div><strong>Swap</strong><p>One item for another. The requester must offer an approved, available item of their own.</p></div></div>
+            <div class="listing-type"><svg th:replace="~{fragments/ui :: icon('gift', '')}"></svg><div><strong>Giveaway</strong><p>Free to a good home. Just send a request with a short message.</p></div></div>
+            <div class="listing-type"><svg th:replace="~{fragments/ui :: icon('recycle', '')}"></svg><div><strong>Upcycling</strong><p>Cardboard, glass jars, fabric and other materials for creative projects.</p></div></div>
+        </div>
+
+        <section class="prose" id="guidelines" style="margin-top:48px">
+            <h2>Community guidelines</h2>
+            <p>By joining Eco Swape you agree to keep the exchange free, honest and safe:</p>
+            <ul>
+                <li><strong>Always free.</strong> No prices, payments, deposits or "tips". Listings that ask for money are removed.</li>
+                <li><strong>Honest listings.</strong> Use your own photos and describe the condition and any flaws accurately.</li>
+                <li><strong>Allowed items only.</strong> No weapons, drugs, alcohol, medicines, counterfeit or stolen goods, or anything unsafe.</li>
+                <li><strong>Be reliable.</strong> Turn up when you agree to meet. If plans change, withdraw from the exchange with a reason.</li>
+                <li><strong>Meet safely.</strong> Hand over items in public places on campus during the day.</li>
+                <li><strong>Respect privacy.</strong> Only use contact details to arrange the exchange.</li>
+                <li><strong>Report problems.</strong> Use "Report" on a listing or request. Our administrators review every report.</li>
+            </ul>
+            <h2>Why accounts and listings are reviewed</h2>
+            <p>Administrators approve every new account and every new or significantly changed listing. Exchanges themselves go directly between students. Admins only step in when something is reported.</p>
+        </section>
+        <div class="cluster" style="margin-top:32px">
+            <a class="btn btn--primary btn--lg" th:href="${currentUser == null} ? @{/register} : @{/explore}" th:text="${currentUser == null} ? 'Join Eco Swape' : 'Explore items'">Join</a>
+            <a class="btn btn--secondary btn--lg" th:href="@{/explore}">Browse items</a>
+        </div>
+    </div>
+</main>
+</body>
+</html>

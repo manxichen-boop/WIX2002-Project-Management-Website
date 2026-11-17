@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+<!--/* Floating navigation. Content depends on authentication state:
+       anonymous → Log in / Join · USER → saved, notifications, exchange requests, profile · ADMIN → admin dashboard. */-->
+<header th:fragment="header" class="site-header" data-header>
+    <div class="container">
+        <div class="site-header__bar">
+            <a th:replace="~{fragments/ui :: brand}"></a>
+            <span class="site-header__divider" aria-hidden="true"></span>
+
+            <nav class="nav" id="primary-nav" aria-label="Primary">
+                <a class="nav__link" th:classappend="${activeNav == 'home'} ? 'is-active'" th:href="@{/}"
+                   th:attr="aria-current=${activeNav == 'home'} ? 'page' : null">Home</a>
+                <div class="dropdown dropdown--hover" data-dropdown>
+                    <a class="nav__link" th:classappend="${activeNav == 'explore'} ? 'is-active'" th:href="@{/explore}"
+                       aria-haspopup="true" aria-expanded="false" data-dropdown-trigger>
+                        Explore Items <svg th:replace="~{fragments/ui :: icon('chevron-down', '')}"></svg>
+                    </a>
+                    <div class="dropdown__menu" role="menu">
+                        <a class="dropdown__item" role="menuitem" th:each="c : ${navCategories}"
+                           th:href="@{/explore(category=${c.slug})}">
+                            <img th:src="@{/img/categories/{k}.webp(k=${c.iconKey})}" alt="">
+                            <span th:text="${c.name}">Books</span>
+                        </a>
+                        <div class="dropdown__sep"></div>
+                        <a class="dropdown__item" role="menuitem" th:href="@{/explore}">
+                            <img th:src="@{/img/categories/more.webp}" alt=""><span>All items</span>
+                        </a>
+                        <a class="dropdown__item" role="menuitem" th:href="@{/pickup-map}">
+                            <span class="dropdown__icon"><svg th:replace="~{fragments/ui :: icon('map', '')}"></svg></span><span>Pickup map</span>
+                        </a>
+                    </div>
+                </div>
+                <a class="nav__link" th:classappend="${activeNav == 'how'} ? 'is-active'" th:href="@{/how-it-works}">How It Works</a>
+                <a class="nav__link" th:classappend="${activeNav == 'community'} ? 'is-active'" th:href="@{/community}">Community</a>
+                <a class="nav__link" th:classappend="${activeNav == 'impact'} ? 'is-active'" th:href="@{/impact}">Impact</a>
+            </nav>
+
+            <div class="header-actions">
+                <button class="icon-btn hide-sm" type="button" aria-label="Search items" aria-expanded="false"
+                        aria-controls="header-search" data-search-toggle>
+                    <svg th:replace="~{fragments/ui :: icon('search', '')}"></svg>
+                </button>
+
+                <!--/* Anonymous visitor */-->
+                <th:block th:if="${currentUser == null}">
+                    <a class="btn btn--secondary btn--sm" th:href="@{/login}">Log in</a>
+                    <a class="btn btn--primary btn--sm" th:href="@{/register}">Join</a>
+                </th:block>
+
+                <!--/* Student */-->
+                <th:block th:if="${currentUser != null and !currentUser.admin}">
+                    <a class="icon-btn hide-sm" th:href="@{/my/saved}" aria-label="Saved items">
+                        <svg th:replace="~{fragments/ui :: icon('heart', '')}"></svg>
+                    </a>
+                    <a class="icon-btn hide-sm" th:href="@{/messages}" aria-label="Messages">
+                        <svg th:replace="~{fragments/ui :: icon('message-circle', '')}"></svg>
+                        <span class="badge-count" data-messages-badge th:hidden="${unreadMessageCount == 0}" th:text="${unreadMessageCount > 99} ? '99+' : ${unreadMessageCount}">0</span>
+                    </a>
+                    <a class="icon-btn" th:href="@{/notifications}" aria-label="Notifications">
+                        <svg th:replace="~{fragments/ui :: icon('bell', '')}"></svg>
+                        <span class="badge-count" data-unread-badge th:hidden="${unreadCount == 0}" th:text="${unreadCount > 99} ? '99+' : ${unreadCount}">0</span>
+                    </a>
+                    <a class="requests-pill" th:href="@{/my/received-requests}"
+                       th:attr="aria-label='Exchange requests waiting for you: ' + ${pendingRequestCount}">
+                        <svg th:replace="~{fragments/ui :: icon('arrow-left-right', '')}"></svg>
+                        <span data-requests-badge th:text="${pendingRequestCount}">0</span>
+                    </a>
+                </th:block>
+
+                <!--/* Administrator */-->
+                <th:block th:if="${currentUser != null and currentUser.admin}">
+                    <a class="icon-btn" th:href="@{/notifications}" aria-label="Notifications">
+                        <svg th:replace="~{fragments/ui :: icon('bell', '')}"></svg>
+                        <span class="badge-count" data-unread-badge th:hidden="${unreadCount == 0}" th:text="${unreadCount > 99} ? '99+' : ${unreadCount}">0</span>
+                    </a>
+                    <a class="requests-pill" th:href="@{/admin}">
+                        <svg th:replace="~{fragments/ui :: icon('shield-check', '')}"></svg>
+                        <span class="requests-pill__label">Admin</span>
+                    </a>
+                </th:block>
+
+                <div class="dropdown" th:if="${currentUser != null}" data-dropdown>
+                    <button class="avatar-btn" type="button" aria-haspopup="true" aria-expanded="false"
+                            data-dropdown-trigger th:attr="aria-label='Account menu for ' + ${currentUser.fullName}">
+                        <img th:if="${currentUser.avatarUrl != null}" th:src="${currentUser.avatarUrl}" alt="">
+                        <th:block th:unless="${currentUser.avatarUrl != null}"><svg th:replace="~{fragments/ui :: icon('circle-user-round', '')}"></svg></th:block>
+                    </button>
+                    <div class="dropdown__menu dropdown__menu--right" role="menu">
+                        <div class="dropdown__header">
+                            <strong th:text="${currentUser.fullName}">Student</strong>
+                            <span th:text="${currentUser.email}">student@university.edu</span>
+                        </div>
+                        <th:block th:unless="${currentUser.admin}">
+                            <a class="dropdown__item" role="menuitem" th:href="@{/dashboard}"><svg th:replace="~{fragments/ui :: icon('layout-dashboard', '')}"></svg>Dashboard</a>
+                            <a class="dropdown__item" role="menuitem" th:href="@{/items/new}"><svg th:replace="~{fragments/ui :: icon('package-plus', '')}"></svg>Post an item</a>
+                            <a class="dropdown__item" role="menuitem" th:href="@{/my/listings}"><svg th:replace="~{fragments/ui :: icon('package', '')}"></svg>My listings</a>
+                            <a class="dropdown__item" role="menuitem" th:href="@{/support}"><svg th:replace="~{fragments/ui :: icon('life-buoy', '')}"></svg>Help &amp; support</a>
+                        </th:block>
+                        <a th:if="${currentUser.admin}" class="dropdown__item" role="menuitem" th:href="@{/admin}"><svg th:replace="~{fragments/ui :: icon('shield-check', '')}"></svg>Admin dashboard</a>
+                        <a class="dropdown__item" role="menuitem" th:href="@{/profile}"><svg th:replace="~{fragments/ui :: icon('user', '')}"></svg>My profile</a>
+                        <div class="dropdown__sep"></div>
+                        <button class="dropdown__item dropdown__item--danger" role="menuitem" type="button" data-logout>
+                            <svg th:replace="~{fragments/ui :: icon('log-out', '')}"></svg>Log out
+                        </button>
+                    </div>
+                </div>
+
+                <button class="icon-btn menu-toggle" type="button" aria-label="Open menu"
+                        aria-controls="primary-nav" aria-expanded="false" data-menu-toggle>
+                    <svg th:replace="~{fragments/ui :: icon('menu', '')}"></svg>
+                </button>
+            </div>
+        </div>
+
+        <div class="search-panel" id="header-search" hidden data-search-panel>
+            <form th:action="@{/explore}" method="get" role="search">
+                <label class="sr-only" for="header-search-input">Search items</label>
+                <div class="input-wrap" style="flex:1">
+                    <svg th:replace="~{fragments/ui :: icon('search', '')}"></svg>
+                    <input class="input" id="header-search-input" type="search" name="q" maxlength="80"
+                           placeholder="Search books, calculators, chairs…" autocomplete="off">
+                </div>
+                <button class="btn btn--primary" type="submit">Search</button>
+            </form>
+        </div>
+    </div>
+</header>
+</body>
+</html>

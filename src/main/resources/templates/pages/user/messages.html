@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{layout/base :: layout(~{::title}, 'user', 'messages', ~{::main})}">
+<head><title>Messages · Eco Swape</title></head>
+<body>
+<main id="main" class="app-main" th:attr="data-open-request=${openRequestId}">
+    <div class="page-head"><div><h1>Messages</h1>
+        <p>Chat with the other student once a request is accepted: agree on a time and place, then both confirm the handover.</p></div></div>
+    <div class="chat" data-chat>
+        <aside class="chat__inbox" aria-label="Conversations">
+            <div class="chat__inbox-head"><h2>Conversations</h2></div>
+            <ul class="chat__list" id="chat-list" aria-live="polite"><li class="chat__placeholder">Loading…</li></ul>
+        </aside>
+        <section class="chat__thread" id="chat-thread" aria-live="polite">
+            <div class="chat__placeholder">
+                <svg th:replace="~{fragments/ui :: icon('message-circle', '')}"></svg>
+                <strong>Select a conversation</strong>
+                <span>Your chats about accepted exchanges appear here.</span>
+            </div>
+        </section>
+    </div>
+</main>
+</body>
+</html>

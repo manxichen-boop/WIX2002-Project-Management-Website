@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{layout/base :: layout(~{::title}, 'admin', 'admin/audit-logs', ~{::main})}">
+<head><title>Audit logs · Eco Swape Admin</title></head>
+<body>
+<main id="main" class="app-main">
+    <div class="page-head"><div><h1>Audit logs</h1><p>A permanent, read-only record of every administrative action.</p></div></div>
+    <div class="toolbar">
+        <label class="sr-only" for="action">Action</label>
+        <select class="select" id="action"><option value="">All actions</option></select>
+        <label class="sr-only" for="target">Target</label>
+        <select class="select" id="target"><option value="">All targets</option><option value="USER">Users</option><option value="ITEM">Listings</option><option value="REPORT">Reports</option><option value="SUPPORT_TICKET">Support tickets</option><option value="CATEGORY">Categories</option></select>
+    </div>
+    <div class="card"><div class="table-wrap" id="rows" aria-live="polite"></div></div><div id="pager"></div>
+</main>
+</body>
+</html>

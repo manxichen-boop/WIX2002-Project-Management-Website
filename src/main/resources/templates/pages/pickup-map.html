@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{layout/base :: layout(~{::title}, 'public', 'pickup-map', ~{::main})}">
+<head><title>Find pickup points · Eco Swape</title></head>
+<body>
+<main id="main" class="container page pickup-page">
+    <section class="pickup-page__grid">
+        <div class="pickup-page__side">
+            <span class="pill"><svg th:replace="~{fragments/ui :: icon('map-pin', '')}"></svg>Pickup Near You</span>
+            <h1 class="pickup-page__title">Find Pickup <span class="text-swoosh">Points</span></h1>
+            <p class="pickup-page__lead">Pick up your swapped items at convenient, community pickup locations around you.</p>
+
+            <div class="pickup-search">
+                <div class="input-wrap"><svg th:replace="~{fragments/ui :: icon('search', '')}"></svg>
+                    <input class="input" id="pm-search" type="search" placeholder="Search a location, area, or item" autocomplete="off" aria-label="Search pickup points"></div>
+                <button class="icon-btn pickup-search__filter" type="button" aria-label="Filter by category" aria-expanded="false" aria-controls="pm-filters" data-filter-toggle>
+                    <svg th:replace="~{fragments/ui :: icon('sliders-horizontal', '')}"></svg></button>
+            </div>
+            <div class="pickup-filters" id="pm-filters" hidden>
+                <button class="chip is-active" type="button" data-category="">All</button>
+                <button class="chip" type="button" th:each="c : ${navCategories}" th:attr="data-category=${c.slug}" th:text="${c.name}">Books</button>
+            </div>
+
+            <ul class="pickup-list" id="pm-list" aria-live="polite">
+                <li class="pickup-row pickup-row--skeleton" aria-hidden="true"></li>
+                <li class="pickup-row pickup-row--skeleton" aria-hidden="true"></li>
+                <li class="pickup-row pickup-row--skeleton" aria-hidden="true"></li>
+            </ul>
+
+            <p class="pickup-page__script" aria-hidden="true">Swap Closer,<br>Live Greener</p>
+        </div>
+
+        <div class="pickup-page__map">
+            <div class="map-frame map-frame--page" id="pm-map" aria-label="Map of pickup points"></div>
+            <button class="map-locate-btn" type="button" data-locate aria-label="Show my location">
+                <svg th:replace="~{fragments/ui :: icon('navigation', '')}"></svg></button>
+            <div class="pickup-summary">
+                <div class="pickup-summary__item"><svg th:replace="~{fragments/ui :: icon('footprints', '')}"></svg>
+                    <div><strong data-sum-count>—</strong><span data-sum-count-label>Pickup points on the map</span></div></div>
+                <div class="pickup-summary__item"><svg th:replace="~{fragments/ui :: icon('route', '')}"></svg>
+                    <div><strong data-sum-closest>Share location</strong><span>Closest pickup</span></div></div>
+                <div class="pickup-summary__item"><svg th:replace="~{fragments/ui :: icon('leaf', '')}"></svg>
+                    <div><strong>Walk &amp; Reuse</strong><span>A greener choice</span></div></div>
+            </div>
+        </div>
+    </section>
+    <img class="pickup-page__landscape" th:src="@{/img/landscape.webp}" alt="" aria-hidden="true">
+</main>
+</body>
+</html>

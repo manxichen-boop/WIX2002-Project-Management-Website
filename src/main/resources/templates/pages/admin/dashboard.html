@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{layout/base :: layout(~{::title}, 'admin', 'admin/dashboard', ~{::main})}">
+<head><title>Admin overview · Eco Swape Admin</title></head>
+<body>
+<main id="main" class="app-main">
+    <div class="page-head"><div><h1>Admin overview</h1><p>Live platform figures, straight from the database.</p></div><div class="page-head__actions"><a class="btn btn--primary" th:href="@{/admin/pending-users}">Review registrations</a><a class="btn btn--secondary" th:href="@{/admin/pending-listings}">Review listings</a></div></div>
+    <div id="kpis" aria-live="polite" aria-busy="true"></div>
+    <div class="chart-grid" id="charts"></div>
+    <section class="card" style="margin-top:22px" aria-labelledby="recent-actions">
+        <div class="card__head"><h2 id="recent-actions">Recent admin actions</h2><a class="link text-sm" th:href="@{/admin/audit-logs}">Full audit log</a></div>
+        <div class="card__body" id="recent"></div>
+    </section>
+</main>
+</body>
+</html>

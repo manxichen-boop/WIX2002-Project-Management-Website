@@ -1,0 +1,12 @@
+# Local development: live template/static reloading and verbose application logs.
+spring:
+  thymeleaf:
+    cache: false
+  web:
+    resources:
+      cache:
+        period: 0
+
+logging:
+  level:
+    com.ecoswap: DEBUG

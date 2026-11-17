@@ -1,0 +1,55 @@
+/* ==========================================================================
+   Student dashboard and "My …" pages.
+   ========================================================================== */
+
+.welcome {
+    position: relative; overflow: hidden;
+    display: flex; align-items: center; justify-content: space-between; gap: 20px; flex-wrap: wrap;
+    padding: clamp(22px, 3vw, 34px); border-radius: var(--radius-xl);
+    background: linear-gradient(120deg, var(--color-forest), var(--color-leaf)); color: #DCE7DF;
+}
+.welcome h1 { color: var(--color-white); font-size: var(--text-2xl); }
+.welcome p { margin-top: 6px; color: #B7C9BD; }
+.welcome__actions { display: flex; gap: 10px; flex-wrap: wrap; position: relative; z-index: 1; }
+.welcome::after { content: ""; position: absolute; right: -60px; bottom: -90px; width: 260px; height: 260px; border-radius: 50%; background: radial-gradient(circle, rgba(185, 217, 107, .35), transparent 70%); }
+
+.dash-grid { display: grid; grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr); gap: 22px; margin-top: 22px; align-items: start; }
+.dash-section + .dash-section { margin-top: 22px; }
+
+.list { list-style: none; }
+.list__item { display: flex; align-items: center; gap: 14px; padding: 14px 0; border-bottom: 1px solid var(--color-border); }
+.list__item:last-child { border-bottom: 0; }
+.list__main { flex: 1; min-width: 0; }
+.list__title { font-weight: 600; color: var(--color-forest); display: block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.list__sub { font-size: var(--text-xs); color: var(--color-text-secondary); }
+
+/* Notification rows */
+.notification { display: flex; gap: 14px; padding: 16px 18px; border-bottom: 1px solid var(--color-border); }
+.notification:last-child { border-bottom: 0; }
+.notification.is-unread { background: rgba(232, 242, 201, .35); }
+.notification__icon { width: 40px; height: 40px; border-radius: 14px; display: grid; place-items: center; flex: none; background: var(--color-forest-soft); color: var(--color-forest); }
+.notification.is-unread .notification__icon { background: var(--color-lime-soft); color: var(--color-action-strong); }
+.notification__body { flex: 1; min-width: 0; }
+.notification__title { font-weight: 700; color: var(--color-forest); }
+.notification__text { font-size: var(--text-sm); color: var(--color-text-secondary); }
+.notification__time { font-size: var(--text-xs); color: var(--color-muted); margin-top: 4px; }
+.dot-unread { width: 9px; height: 9px; border-radius: 50%; background: var(--color-terracotta); flex: none; margin-top: 8px; }
+
+/* Request cards (my requests / received requests / history) */
+.request-list { display: grid; gap: 14px; }
+.request { display: grid; grid-template-columns: auto minmax(0, 1fr) auto; gap: 16px; align-items: center; padding: 16px; }
+.request__media { width: 84px; height: 84px; border-radius: 16px; overflow: hidden; background: var(--color-forest-soft); }
+.request__media img { width: 100%; height: 100%; object-fit: cover; }
+.request__title { font-family: var(--font-heading); font-weight: 700; color: var(--color-forest); }
+.request__meta { display: flex; flex-wrap: wrap; gap: 6px 14px; margin-top: 6px; font-size: var(--text-xs); color: var(--color-text-secondary); }
+.request__meta span { display: inline-flex; align-items: center; gap: 5px; }
+.request__meta .icon { width: 14px; height: 14px; }
+.request__message { margin-top: 8px; padding: 10px 12px; border-radius: 12px; background: var(--color-white); border: 1px solid var(--color-border); font-size: var(--text-sm); color: var(--color-text-secondary); }
+.request__offer { display: inline-flex; align-items: center; gap: 8px; margin-top: 8px; padding: 6px 10px 6px 6px; border-radius: 12px; background: var(--color-lime-faint); font-size: var(--text-sm); font-weight: 600; color: var(--color-forest); }
+.request__offer img { width: 32px; height: 32px; border-radius: 8px; object-fit: cover; }
+.request__actions { display: flex; flex-direction: column; gap: 8px; align-items: flex-end; }
+.request__progress { font-size: var(--text-xs); color: var(--color-text-secondary); text-align: right; }
+
+/* Listing management */
+.listing-row { display: grid; grid-template-columns: auto minmax(0, 1fr) auto; gap: 16px; align-items: center; padding: 16px; }
+.listing-row__reason { margin-top: 8px; }

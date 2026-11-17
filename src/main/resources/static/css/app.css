@@ -1,0 +1,11 @@
+/* Central stylesheet entry point. Order matters: tokens → base → layout → components → pages → responsive. */
+@import url("theme.css");
+@import url("base.css");
+@import url("layout.css");
+@import url("components.css");
+@import url("pages.css");
+@import url("home.css");
+@import url("dashboard.css");
+@import url("admin.css");
+@import url("features.css");
+@import url("responsive.css");

@@ -1,0 +1,11 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{layout/base :: layout(~{::title}, 'user', 'saved-items', ~{::main})}">
+<head><title>Saved items · Eco Swape</title></head>
+<body>
+<main id="main" class="app-main">
+    <div class="page-head"><div><h1>Saved items</h1><p>Listings you saved for later. Availability updates automatically.</p></div></div>
+    <div class="item-grid" id="rows" aria-live="polite"></div><div id="pager"></div>
+</main>
+</body>
+</html>

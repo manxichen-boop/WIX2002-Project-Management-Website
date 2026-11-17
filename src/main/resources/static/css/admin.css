@@ -1,0 +1,32 @@
+/* ==========================================================================
+   Admin dashboard: denser information, same theme.
+   ========================================================================== */
+
+.admin-kpis { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 14px; }
+.admin-kpis .stat-card { padding: 16px; }
+.admin-kpis .stat-card__value { font-size: 1.45rem; }
+.kpi-group + .kpi-group { margin-top: 22px; }
+.kpi-group__title { margin-bottom: 10px; font-size: var(--text-sm); font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--color-text-secondary); }
+
+.chart-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 18px; margin-top: 22px; }
+.chart-card { padding: 20px; }
+.chart-card h3 { font-size: var(--text-md); }
+.chart-card p { font-size: var(--text-xs); color: var(--color-text-secondary); margin-top: 2px; }
+.chart { margin-top: 14px; width: 100%; height: auto; overflow: visible; }
+.chart text { font-family: var(--font-body); font-size: 11px; fill: var(--color-text-secondary); }
+.chart .chart__grid { stroke: var(--color-border); stroke-width: 1; }
+.chart .chart__bar { fill: var(--color-action); }
+.chart .chart__bar:hover { fill: var(--color-forest); }
+.chart .chart__value { font-weight: 700; fill: var(--color-forest); }
+
+.review-card { display: grid; grid-template-columns: 220px minmax(0, 1fr) auto; gap: 20px; padding: 18px; align-items: start; }
+.review-card + .review-card { margin-top: 14px; }
+.review-card__photos { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; }
+.review-card__photos img, .review-card__photos .media-cell__ph { width: 100%; aspect-ratio: 1; object-fit: cover; border-radius: 10px; cursor: zoom-in; }
+.review-card__photos img:first-child { grid-column: 1 / -1; aspect-ratio: 4 / 3; }
+.review-card h3 { font-size: var(--text-lg); }
+.review-card__desc { margin-top: 8px; font-size: var(--text-sm); color: var(--color-text-secondary); white-space: pre-wrap; max-height: 7.5em; overflow: hidden; }
+.review-card__actions { display: flex; flex-direction: column; gap: 8px; min-width: 170px; }
+.history-list { list-style: none; display: grid; gap: 10px; font-size: var(--text-sm); }
+.history-list li { padding: 10px 12px; border-radius: 12px; background: var(--color-white); border: 1px solid var(--color-border); }
+.lightbox img { width: 100%; border-radius: var(--radius-md); }

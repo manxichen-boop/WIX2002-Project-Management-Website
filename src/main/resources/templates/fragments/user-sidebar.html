@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+<!--/* Student navigation (desktop). On tablet/mobile the bottom navigation replaces it. */-->
+<aside th:fragment="sidebar" class="sidebar" aria-label="Student navigation">
+    <div class="sidebar__profile">
+        <span th:replace="~{fragments/ui :: avatar(${currentUser}, '')}"></span>
+        <div><strong th:text="${currentUser.fullName}">Student</strong><span th:text="${currentUser.university}">University</span></div>
+    </div>
+    <nav>
+        <div class="sidebar__group">
+        <a class="sidebar__link" th:classappend="${activeSection == 'dashboard'} ? 'is-active'" th:href="@{/dashboard}" th:attr="aria-current=${activeSection == 'dashboard'} ? 'page' : null"><svg th:replace="~{fragments/ui :: icon('layout-dashboard', '')}"></svg>Dashboard</a>
+        <a class="sidebar__link" th:classappend="${activeSection == 'explore'} ? 'is-active'" th:href="@{/explore}" th:attr="aria-current=${activeSection == 'explore'} ? 'page' : null"><svg th:replace="~{fragments/ui :: icon('search', '')}"></svg>Explore Items</a>
+        <a class="sidebar__link" th:href="@{/pickup-map}"><svg th:replace="~{fragments/ui :: icon('map', '')}"></svg>Pickup Map</a>
+        <a class="sidebar__link" th:classappend="${activeSection == 'post'} ? 'is-active'" th:href="@{/items/new}" th:attr="aria-current=${activeSection == 'post'} ? 'page' : null"><svg th:replace="~{fragments/ui :: icon('package-plus', '')}"></svg>Post an Item</a>
+        </div><div class="sidebar__group"><p class="sidebar__label">My exchange</p>
+        <a class="sidebar__link" th:classappend="${activeSection == 'listings'} ? 'is-active'" th:href="@{/my/listings}" th:attr="aria-current=${activeSection == 'listings'} ? 'page' : null"><svg th:replace="~{fragments/ui :: icon('package', '')}"></svg>My Listings</a>
+        <a class="sidebar__link" th:classappend="${activeSection == 'requests'} ? 'is-active'" th:href="@{/my/requests}" th:attr="aria-current=${activeSection == 'requests'} ? 'page' : null"><svg th:replace="~{fragments/ui :: icon('send', '')}"></svg>My Requests</a>
+        <a class="sidebar__link" th:classappend="${activeSection == 'received'} ? 'is-active'" th:href="@{/my/received-requests}" th:attr="aria-current=${activeSection == 'received'} ? 'page' : null"><svg th:replace="~{fragments/ui :: icon('inbox', '')}"></svg>Received Requests<span class="sidebar__count" th:if="${pendingRequestCount > 0}" th:text="${pendingRequestCount}">0</span></a>
+        <a class="sidebar__link" th:classappend="${activeSection == 'messages'} ? 'is-active'" th:href="@{/messages}" th:attr="aria-current=${activeSection == 'messages'} ? 'page' : null"><svg th:replace="~{fragments/ui :: icon('message-circle', '')}"></svg>Messages<span class="sidebar__count" data-messages-count th:hidden="${unreadMessageCount == 0}" th:text="${unreadMessageCount}">0</span></a>
+        <a class="sidebar__link" th:classappend="${activeSection == 'saved'} ? 'is-active'" th:href="@{/my/saved}" th:attr="aria-current=${activeSection == 'saved'} ? 'page' : null"><svg th:replace="~{fragments/ui :: icon('heart', '')}"></svg>Saved Items</a>
+        <a class="sidebar__link" th:classappend="${activeSection == 'history'} ? 'is-active'" th:href="@{/my/history}" th:attr="aria-current=${activeSection == 'history'} ? 'page' : null"><svg th:replace="~{fragments/ui :: icon('history', '')}"></svg>Exchange History</a>
+        <a class="sidebar__link" th:classappend="${activeSection == 'notifications'} ? 'is-active'" th:href="@{/notifications}" th:attr="aria-current=${activeSection == 'notifications'} ? 'page' : null"><svg th:replace="~{fragments/ui :: icon('bell', '')}"></svg>Notifications<span class="sidebar__count" th:if="${unreadCount > 0}" th:text="${unreadCount}">0</span></a>
+        </div><div class="sidebar__group"><p class="sidebar__label">Community</p>
+        <a class="sidebar__link" th:classappend="${activeSection == 'upcycling'} ? 'is-active'" th:href="@{/explore(type='UPCYCLING')}" th:attr="aria-current=${activeSection == 'upcycling'} ? 'page' : null"><svg th:replace="~{fragments/ui :: icon('recycle', '')}"></svg>Upcycling</a>
+        <a class="sidebar__link" th:classappend="${activeSection == 'community'} ? 'is-active'" th:href="@{/community}" th:attr="aria-current=${activeSection == 'community'} ? 'page' : null"><svg th:replace="~{fragments/ui :: icon('users-round', '')}"></svg>Community</a>
+        <a class="sidebar__link" th:classappend="${activeSection == 'profile'} ? 'is-active'" th:href="@{/profile}" th:attr="aria-current=${activeSection == 'profile'} ? 'page' : null"><svg th:replace="~{fragments/ui :: icon('user', '')}"></svg>My Profile</a>
+        <a class="sidebar__link" th:classappend="${activeSection == 'support'} ? 'is-active'" th:href="@{/support}" th:attr="aria-current=${activeSection == 'support'} ? 'page' : null"><svg th:replace="~{fragments/ui :: icon('life-buoy', '')}"></svg>Help &amp; Support</a>
+        </div>
+    </nav>
+</aside>
+</body>
+</html>

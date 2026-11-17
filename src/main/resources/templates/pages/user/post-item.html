@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{layout/base :: layout(~{::title}, 'user', 'post-item', ~{::main})}">
+<head><title th:text="${item == null} ? 'Post an item · Eco Swape' : 'Edit listing · Eco Swape'">Post an item · Eco Swape</title></head>
+<body>
+<main id="main" class="app-main" th:attr="data-item-id=${item?.id}">
+    <div class="page-head">
+        <div>
+            <h1 th:text="${item == null} ? 'Post an item' : 'Edit your listing'">Post an item</h1>
+            <p th:if="${item == null}">Listings are reviewed by an administrator before they appear in Explore, usually within a day.</p>
+            <p th:if="${item != null}">Changing the name, description, category, condition, type or photos of an approved listing sends it back for a quick review.</p>
+        </div>
+    </div>
+
+    <div class="alert alert--warning" th:if="${item != null and item.rejectionReason != null}" style="margin-bottom:18px">
+        <svg th:replace="~{fragments/ui :: icon('triangle-alert', '')}"></svg>
+        <div><strong th:text="${item.approvalStatus.name() == 'NEEDS_CHANGES'} ? 'The administrator asked for changes' : 'Why this listing was not approved'">Feedback</strong>
+            <span th:text="${item.rejectionReason}">Reason</span> Saving your changes resubmits the listing.</div>
+    </div>
+
+    <form class="card card--pad form" id="item-form" novalidate>
+        <div class="alert alert--danger" data-form-error hidden role="alert"></div>
+        <div class="field">
+            <label for="name">Item name</label>
+            <input class="input" id="name" name="name" maxlength="120" required th:value="${item?.name}" placeholder="e.g. Engineering Mathematics, 10th edition">
+        </div>
+        <div class="form-row">
+            <div class="field">
+                <label for="categoryId">Category</label>
+                <select class="select" id="categoryId" name="categoryId" required>
+                    <option value="">Choose a category</option>
+                    <option th:each="c : ${categories}" th:value="${c.id}" th:attr="data-icon=${c.iconKey}" th:text="${c.name}" th:selected="${item != null and item.categoryId == c.id}">Books</option>
+                </select>
+            </div>
+            <div class="field">
+                <label for="condition">Condition</label>
+                <select class="select" id="condition" name="condition" required>
+                    <option value="">Choose the condition</option>
+                    <option th:each="c : ${conditions}" th:value="${c.name()}" th:text="${c.label()}" th:selected="${item != null and item.condition == c.name()}">Good</option>
+                </select>
+            </div>
+        </div>
+        <div class="field">
+            <label for="description">Description</label>
+            <textarea class="textarea" id="description" name="description" maxlength="2000" required
+                      placeholder="What is it, what's included, any flaws? Honest details help it find the right home." th:text="${item?.description}"></textarea>
+            <p class="field__help"><span data-count="description">0</span>/2000 characters</p>
+        </div>
+        <fieldset class="field" style="border:0;padding:0;margin:0">
+            <legend class="field__label" style="margin-bottom:8px">Listing type</legend>
+            <div class="choice-grid">
+                <label class="choice"><input type="radio" name="listingType" value="SWAP" required th:checked="${item == null or item.listingType.name() == 'SWAP'}">
+                    <span class="choice__box"><strong><svg th:replace="~{fragments/ui :: icon('repeat', '')}"></svg>Swap</strong><span>Exchange it for another student's item.</span></span></label>
+                <label class="choice"><input type="radio" name="listingType" value="GIVEAWAY" th:checked="${item != null and item.listingType.name() == 'GIVEAWAY'}">
+                    <span class="choice__box"><strong><svg th:replace="~{fragments/ui :: icon('gift', '')}"></svg>Giveaway</strong><span>Give it away for free, nothing expected back.</span></span></label>
+                <label class="choice"><input type="radio" name="listingType" value="UPCYCLING" th:checked="${item != null and item.listingType.name() == 'UPCYCLING'}">
+                    <span class="choice__box"><strong><svg th:replace="~{fragments/ui :: icon('recycle', '')}"></svg>Upcycling</strong><span>Reusable materials for creative projects.</span></span></label>
+            </div>
+        </fieldset>
+        <div class="form-row">
+            <div class="field">
+                <label for="pickupLocation">Pickup location</label>
+                <div class="input-wrap"><svg th:replace="~{fragments/ui :: icon('map-pin', '')}"></svg>
+                    <input class="input" id="pickupLocation" name="pickupLocation" maxlength="150" required th:value="${item?.pickupLocation}" placeholder="e.g. Main library entrance"></div>
+            </div>
+            <div class="field">
+                <label for="approximateWeight">Approximate weight (kg) <span class="optional">(optional)</span></label>
+                <input class="input" id="approximateWeight" name="approximateWeight" type="number" min="0.01" max="500" step="0.01"
+                       th:value="${item?.approximateWeight}" placeholder="e.g. 1.2">
+                <p class="field__help">Helps us report the verified weight of reused items.</p>
+            </div>
+        </div>
+        <div class="field pickup-picker" data-pickup-picker>
+            <label for="map-search">Pin the pickup point on the map <span class="optional">(recommended)</span></label>
+            <p class="field__help">Search a place, tap the map or use your current location. Students will see how far it is and get walking directions.
+                Please choose a public meeting spot (library, faculty lobby, café) rather than your home address.</p>
+            <div class="map-tools">
+                <div class="map-search">
+                    <div class="input-wrap"><svg th:replace="~{fragments/ui :: icon('search', '')}"></svg>
+                        <input class="input" id="map-search" type="search" placeholder="Search a place, e.g. Main Library" autocomplete="off"
+                               role="combobox" aria-expanded="false" aria-controls="map-search-results" aria-autocomplete="list"></div>
+                    <ul class="map-search__results" id="map-search-results" role="listbox" hidden></ul>
+                </div>
+                <button class="btn btn--secondary" type="button" data-locate>
+                    <svg th:replace="~{fragments/ui :: icon('locate-fixed', '')}"></svg>Use my location</button>
+            </div>
+            <div class="map-frame map-frame--picker" id="pickup-map" aria-label="Map. Tap to place the pickup pin."></div>
+            <div class="map-picker__status" data-pin-status aria-live="polite">
+                <span data-pin-text>No pin yet. Tap the map to place one.</span>
+                <button class="link" type="button" data-clear-pin hidden>Remove pin</button>
+            </div>
+            <input type="hidden" name="pickupLatitude" id="pickupLatitude" th:value="${item?.pickupLatitude}">
+            <input type="hidden" name="pickupLongitude" id="pickupLongitude" th:value="${item?.pickupLongitude}">
+        </div>
+        <div class="field">
+            <span class="field__label">Photos <span class="optional">(1–6 · JPG, PNG or WebP · up to 5 MB each)</span></span>
+            <div class="uploader">
+                <label class="uploader__drop" for="photos" data-drop>
+                    <svg th:replace="~{fragments/ui :: icon('image-plus', '')}"></svg>
+                    <strong>Add photos</strong><span>Drag them here or click to choose. The first photo is the cover.</span>
+                </label>
+                <input class="sr-only" id="photos" name="photos" type="file" accept="image/jpeg,image/png,image/webp" multiple>
+                <div class="uploader__grid" id="photo-grid">
+                    <div class="thumb" th:each="img, s : ${item?.images}" th:attr="data-existing=${img.id}">
+                        <img th:src="${img.url}" alt="">
+                        <span class="thumb__cover" th:if="${s.first}">Cover</span>
+                        <button class="thumb__remove" type="button" aria-label="Remove photo"><svg th:replace="~{fragments/ui :: icon('x', '')}"></svg></button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="spread" style="margin-top:6px">
+            <a class="btn btn--ghost" th:href="${item == null} ? @{/dashboard} : @{/my/listings}">Cancel</a>
+            <button class="btn btn--primary btn--lg" type="submit" th:text="${item == null} ? 'Submit for approval' : 'Save changes'">Submit for approval</button>
+        </div>
+    </form>
+</main>
+</body>
+</html>

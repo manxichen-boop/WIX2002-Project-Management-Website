@@ -1,0 +1,12 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{layout/base :: layout(~{::title}, 'user', 'my-requests', ~{::main})}">
+<head><title>My requests · Eco Swape</title></head>
+<body>
+<main id="main" class="app-main">
+    <div class="page-head"><div><h1>My requests</h1><p>Items you have asked for. Cancel pending requests or confirm the handover once you have the item.</p></div></div>
+    <div class="tabs" role="tablist" style="margin-bottom:18px"><button class="tab" role="tab" type="button" data-status="" aria-selected="true">All</button><button class="tab" role="tab" type="button" data-status="PENDING" aria-selected="false">Pending</button><button class="tab" role="tab" type="button" data-status="ACCEPTED" aria-selected="false">Accepted</button><button class="tab" role="tab" type="button" data-status="COMPLETED" aria-selected="false">Completed</button><button class="tab" role="tab" type="button" data-status="REJECTED" aria-selected="false">Declined</button></div>
+    <div class="request-list" id="rows" aria-live="polite"></div><div id="pager"></div>
+</main>
+</body>
+</html>

@@ -1,0 +1,22 @@
+# Production: secure cookies, cached templates/static assets, proxy-aware URLs.
+spring:
+  thymeleaf:
+    cache: true
+  web:
+    resources:
+      cache:
+        cachecontrol:
+          max-age: 7d
+          cache-public: true
+
+server:
+  forward-headers-strategy: framework
+  servlet:
+    session:
+      cookie:
+        secure: true
+
+logging:
+  level:
+    root: INFO
+    com.ecoswap: INFO

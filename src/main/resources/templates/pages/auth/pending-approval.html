@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{layout/base :: layout(~{::title}, 'public', 'account-status', ~{::main})}">
+<head><title>Account status · Eco Swape</title></head>
+<body>
+<main id="main" class="container">
+    <section class="card status-panel" th:switch="${state}">
+
+        <th:block th:case="'registered'">
+            <span class="state__icon"><svg th:replace="~{fragments/ui :: icon('mail-check', '')}"></svg></span>
+            <h1>Registration received</h1>
+            <p>Thanks for joining Eco Swape! Please confirm your e-mail using the link we've sent. An administrator will then review your account. You'll be able to log in once it's approved.</p>
+            <ol class="timeline">
+                <li><svg th:replace="~{fragments/ui :: icon('circle-check', '')}"></svg><span><strong>Account created</strong>, waiting for review</span></li>
+                <li class="is-pending"><svg th:replace="~{fragments/ui :: icon('mail', '')}"></svg><span>Confirm your e-mail address</span></li>
+                <li class="is-pending"><svg th:replace="~{fragments/ui :: icon('hourglass', '')}"></svg><span>Administrator approval (we'll notify you by e-mail)</span></li>
+            </ol>
+        </th:block>
+
+        <th:block th:case="'pending'">
+            <span class="state__icon"><svg th:replace="~{fragments/ui :: icon('hourglass', '')}"></svg></span>
+            <h1>Your account is awaiting approval</h1>
+            <p>An administrator still needs to review your registration. This usually happens within one working day, and you'll get an e-mail as soon as it's done.</p>
+        </th:block>
+
+        <th:block th:case="'verify-verified'">
+            <span class="state__icon"><svg th:replace="~{fragments/ui :: icon('mail-check', '')}"></svg></span>
+            <h1>E-mail confirmed</h1>
+            <p>Thank you! Your e-mail address is confirmed. If your account has already been approved you can log in now; otherwise we'll e-mail you when it is.</p>
+        </th:block>
+
+        <th:block th:case="'verify-already_verified'">
+            <span class="state__icon"><svg th:replace="~{fragments/ui :: icon('circle-check', '')}"></svg></span>
+            <h1>Already confirmed</h1>
+            <p>This e-mail address was confirmed earlier, so there's nothing more to do.</p>
+        </th:block>
+
+        <th:block th:case="*">
+            <span class="state__icon" style="background:var(--color-danger-bg);color:var(--color-danger)"><svg th:replace="~{fragments/ui :: icon('circle-x', '')}"></svg></span>
+            <h1 th:text="${state == 'verify-expired'} ? 'This link has expired' : 'This link is not valid'">This link is not valid</h1>
+            <p>Confirmation links work once and expire after 48 hours. Enter your e-mail and we'll send a new one.</p>
+            <form class="form" id="resend-form" style="max-width:420px;margin:22px auto 0;text-align:left" novalidate>
+                <div class="field"><label for="resend-email">University e-mail</label>
+                    <input class="input" id="resend-email" name="email" type="email" required maxlength="190" autocomplete="email"></div>
+                <button class="btn btn--primary btn--block" type="submit">Send a new link</button>
+            </form>
+        </th:block>
+
+        <div class="cluster">
+            <a class="btn btn--primary" th:href="@{/login}">Go to log in</a>
+            <a class="btn btn--secondary" th:href="@{/explore}">Browse items meanwhile</a>
+        </div>
+    </section>
+</main>
+</body>
+</html>

@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{layout/base :: layout(~{::title}, 'admin', 'admin/all-users', ~{::main})}">
+<head><title>All users · Eco Swape Admin</title></head>
+<body>
+<main id="main" class="app-main">
+    <div class="page-head"><div><h1>All users</h1><p>Every student account. Suspend accounts that break the guidelines, or reactivate them.</p></div></div>
+    <div class="toolbar">
+        <div class="input-wrap"><svg th:replace="~{fragments/ui :: icon('search', '')}"></svg><label class="sr-only" for="q">Search</label><input class="input" id="q" type="search" maxlength="80" placeholder="Search name, e-mail or university"></div>
+        <label class="sr-only" for="status">Status</label>
+        <select class="select" id="status"><option value="">All statuses</option><option value="ACTIVE">Active</option><option value="PENDING_APPROVAL">Pending approval</option><option value="SUSPENDED">Suspended</option><option value="REJECTED">Rejected</option></select>
+    </div>
+    <div class="card"><div class="table-wrap" id="rows" aria-live="polite"></div></div>
+    <div id="pager"></div>
+</main>
+</body>
+</html>

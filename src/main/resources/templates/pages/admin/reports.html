@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{layout/base :: layout(~{::title}, 'admin', 'admin/reports', ~{::main})}">
+<head><title>Reports · Eco Swape Admin</title></head>
+<body>
+<main id="main" class="app-main">
+    <div class="page-head"><div><h1>Reports</h1><p>Investigate reported listings and students. Resolve (optionally suspending) or dismiss with notes.</p></div></div>
+    <div class="tabs" role="tablist" style="margin-bottom:18px">
+        <button class="tab" role="tab" type="button" data-status="OPEN" aria-selected="true">Open</button>
+        <button class="tab" role="tab" type="button" data-status="UNDER_REVIEW" aria-selected="false">Under review</button>
+        <button class="tab" role="tab" type="button" data-status="RESOLVED" aria-selected="false">Resolved</button>
+        <button class="tab" role="tab" type="button" data-status="DISMISSED" aria-selected="false">Dismissed</button>
+        <button class="tab" role="tab" type="button" data-status="" aria-selected="false">All</button>
+    </div>
+    <div class="card"><div class="table-wrap" id="rows" aria-live="polite"></div></div><div id="pager"></div>
+</main>
+</body>
+</html>

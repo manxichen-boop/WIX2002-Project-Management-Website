@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{layout/base :: layout(~{::title}, 'user', 'my-listings', ~{::main})}">
+<head><title>My listings · Eco Swape</title></head>
+<body>
+<main id="main" class="app-main">
+    <div class="page-head">
+        <div><h1>My listings</h1><p>Track approval, update details and see who wants your items.</p></div>
+        <div class="page-head__actions"><a class="btn btn--primary" th:href="@{/items/new}"><svg th:replace="~{fragments/ui :: icon('plus', '')}"></svg>Post an item</a></div>
+    </div>
+    <div class="tabs" role="tablist" aria-label="Listing filter" style="margin-bottom:18px">
+        <button class="tab" role="tab" type="button" data-tab="active" aria-selected="true">Current</button>
+        <button class="tab" role="tab" type="button" data-tab="archived" aria-selected="false">Archived</button>
+    </div>
+    <div class="request-list" id="listings" aria-live="polite"></div>
+    <div id="pager"></div>
+</main>
+</body>
+</html>

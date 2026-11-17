@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{layout/base :: layout(~{::title}, 'public', '', ~{::main})}">
+<head><title>Community · Eco Swape</title></head>
+<body>
+<main id="main" class="page">
+    <div class="container">
+        <header class="page-hero">
+            <span class="eyebrow">Community</span>
+            <h1>What's happening on campus</h1>
+            <p>Live activity from the exchange. To protect privacy we never show who swapped with whom: only what found a new home.</p>
+        </header>
+        <div class="metric-hero">
+            <div class="metric"><strong th:text="${#numbers.formatInteger(impact.communityMembers, 1, 'COMMA')}">0</strong><span>approved students</span></div>
+            <div class="metric"><strong th:text="${#numbers.formatInteger(impact.availableListings, 1, 'COMMA')}">0</strong><span>items available now</span></div>
+            <div class="metric"><strong th:text="${#numbers.formatInteger(impact.completedExchanges, 1, 'COMMA')}">0</strong><span>completed exchanges</span></div>
+            <div class="metric"><strong th:text="${#numbers.formatInteger(impact.itemsReused, 1, 'COMMA')}">0</strong><span>items reused</span></div>
+        </div>
+        <div class="split" style="margin-top:32px">
+            <section class="card card--pad" aria-labelledby="recent-ex">
+                <h2 id="recent-ex" style="font-size:var(--text-xl);margin-bottom:14px">Recent exchanges</h2>
+                <ul class="list" th:unless="${#lists.isEmpty(recentExchanges)}">
+                    <li class="list__item" th:each="a : ${recentExchanges}">
+                        <span class="stat-card__icon"><svg th:replace="~{fragments/ui :: icon('handshake', '')}"></svg></span>
+                        <div class="list__main"><span class="list__title" th:text="${a.itemName}">Item</span>
+                            <span class="list__sub" th:text="${a.listingType} + ' · ' + ${a.categoryName}">Swap · Books</span></div>
+                        <time class="list__sub nowrap" th:attr="data-relative=${a.at}"></time>
+                    </li>
+                </ul>
+                <th:block th:if="${#lists.isEmpty(recentExchanges)}"><div th:replace="~{fragments/ui :: state('handshake', 'No completed exchanges yet', 'The first completed swaps and giveaways will appear here.')}"></div></th:block>
+            </section>
+            <section class="card card--pad" aria-labelledby="new-items">
+                <h2 id="new-items" style="font-size:var(--text-xl);margin-bottom:14px">Newly shared items</h2>
+                <ul class="list" th:unless="${#lists.isEmpty(newListings)}">
+                    <li class="list__item" th:each="i : ${newListings}">
+                        <span class="avatar" style="border-radius:12px"><img th:if="${i.coverUrl != null}" th:src="${i.coverUrl}" alt=""></span>
+                        <div class="list__main"><a class="list__title" th:href="@{/items/{id}(id=${i.id})}" th:text="${i.name}">Item</a>
+                            <span class="list__sub" th:text="${i.listingType.label()} + ' · ' + ${i.categoryName}">Swap · Books</span></div>
+                        <time class="list__sub nowrap" th:attr="data-relative=${i.createdAt}"></time>
+                    </li>
+                </ul>
+                <th:block th:if="${#lists.isEmpty(newListings)}"><div th:replace="~{fragments/ui :: state('sprout', 'No listings yet', 'Approved listings will appear here as students share them.')}"></div></th:block>
+            </section>
+        </div>
+    </div>
+</main>
+</body>
+</html>

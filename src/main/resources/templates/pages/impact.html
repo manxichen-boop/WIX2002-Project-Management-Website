@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{layout/base :: layout(~{::title}, 'public', '', ~{::main})}">
+<head><title>Impact · Eco Swape</title></head>
+<body>
+<main id="main" class="page">
+    <div class="container">
+        <header class="page-hero">
+            <span class="eyebrow">Sustainability impact</span>
+            <h1>Verified impact, counted from real exchanges</h1>
+            <p>Every number on this page comes straight from the Eco Swape database. Nothing is estimated or rounded up.</p>
+        </header>
+        <div class="metric-hero">
+            <div class="metric"><strong th:text="${#numbers.formatInteger(impact.completedExchanges, 1, 'COMMA')}">0</strong><span>completed exchanges</span></div>
+            <div class="metric"><strong th:text="${#numbers.formatInteger(impact.itemsReused, 1, 'COMMA')}">0</strong><span>items reused</span></div>
+            <div class="metric"><strong th:text="${#numbers.formatDecimal(impact.reusedWeightKg, 1, 'COMMA', 1, 'POINT')} + ' kg'">0 kg</strong><span>recorded weight reused</span></div>
+            <div class="metric"><strong th:text="${#numbers.formatInteger(impact.communityMembers, 1, 'COMMA')}">0</strong><span>approved students</span></div>
+        </div>
+
+        <div class="split" style="margin-top:28px">
+            <section class="card card--pad" aria-labelledby="by-type">
+                <h2 id="by-type" style="font-size:var(--text-xl);margin-bottom:14px">Items reused by listing type</h2>
+                <ul class="bar-list" th:unless="${#lists.isEmpty(impact.reusedByType)}"
+                    th:with="max=${impact.maxReusedByType()}">
+                    <li th:each="b : ${impact.reusedByType}"><span class="spread"><span th:text="${b.label}">Swap</span><strong th:text="${b.count}">0</strong></span>
+                        <span class="bar-list__track"><span class="bar-list__fill" th:style="'width:' + ${b.count * 100 / max} + '%'"></span></span></li>
+                </ul>
+                <p th:if="${#lists.isEmpty(impact.reusedByType)}" class="text-secondary">No completed exchanges yet.</p>
+            </section>
+            <section class="card card--pad" aria-labelledby="by-cat">
+                <h2 id="by-cat" style="font-size:var(--text-xl);margin-bottom:14px">Items reused by category</h2>
+                <ul class="bar-list" th:unless="${#lists.isEmpty(impact.reusedByCategory)}"
+                    th:with="max=${impact.maxReusedByCategory()}">
+                    <li th:each="b : ${impact.reusedByCategory}"><span class="spread"><span th:text="${b.label}">Books</span><strong th:text="${b.count}">0</strong></span>
+                        <span class="bar-list__track"><span class="bar-list__fill" th:style="'width:' + ${b.count * 100 / max} + '%'"></span></span></li>
+                </ul>
+                <p th:if="${#lists.isEmpty(impact.reusedByCategory)}" class="text-secondary">No completed exchanges yet.</p>
+            </section>
+        </div>
+
+        <section class="prose" style="margin-top:44px" aria-labelledby="method">
+            <h2 id="method">How we count</h2>
+            <ul>
+                <li><strong>Completed exchanges</strong> are requests where <em>both</em> students confirmed the handover.</li>
+                <li><strong>Items reused</strong> counts every item that changed hands in a completed exchange. A swap moves two items, so it counts as two.</li>
+                <li><strong>Recorded weight reused</strong> is the sum of the approximate weights owners entered when listing those items
+                    (<span th:text="${impact.itemsWithRecordedWeight}">0</span> of <span th:text="${impact.itemsReused}">0</span> reused items have a recorded weight).
+                    Items without a recorded weight add nothing. We don't guess.</li>
+                <li><strong>Approved students</strong> are accounts with an active, administrator-approved status.</li>
+            </ul>
+            <h2>Why there's no CO₂ figure</h2>
+            <p>Carbon savings depend on what each item would otherwise have been replaced with, and how. We don't have reliable, item-specific emission factors for the things students exchange, so instead of publishing an estimate that looks precise but isn't, we report the verified counts and recorded weight above. If the university adopts an approved conversion methodology, it can be added here and clearly labelled as an estimate.</p>
+        </section>
+    </div>
+</main>
+</body>
+</html>

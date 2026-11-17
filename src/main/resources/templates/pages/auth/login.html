@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{layout/base :: layout(~{::title}, 'public', 'login', ~{::main})}">
+<head><title>Log in · Eco Swape</title></head>
+<body>
+<main id="main" class="container auth">
+    <section class="card auth__card" aria-labelledby="login-title">
+        <h1 id="login-title">Welcome back</h1>
+        <p>Log in to swap, give away and upcycle with your campus.</p>
+        <div class="alert alert--warning" th:if="${param.inactive != null}" style="margin-top:18px">
+            <svg th:replace="~{fragments/ui :: icon('shield-alert', '')}"></svg>
+            <div><strong>You've been signed out</strong>Your account is no longer active. Log in again to see why.</div>
+        </div>
+        <form class="form" id="login-form" novalidate>
+            <div class="alert alert--danger" data-form-error hidden role="alert"></div>
+            <div class="field">
+                <label for="email">University e-mail</label>
+                <div class="input-wrap">
+                    <svg th:replace="~{fragments/ui :: icon('mail', '')}"></svg>
+                    <input class="input" id="email" name="email" type="email" autocomplete="email" maxlength="190" required autofocus>
+                </div>
+            </div>
+            <div class="field">
+                <div class="spread"><label for="password">Password</label><a class="link text-sm" th:href="@{/forgot-password}">Forgot password?</a></div>
+                <div class="input-wrap">
+                    <svg th:replace="~{fragments/ui :: icon('lock', '')}"></svg>
+                    <input class="input" id="password" name="password" type="password" autocomplete="current-password" maxlength="200" required>
+                    <button class="input-wrap__toggle" type="button" aria-label="Show password" data-toggle-password="password"><svg th:replace="~{fragments/ui :: icon('eye', '')}"></svg></button>
+                </div>
+            </div>
+            <label class="check"><input type="checkbox" name="rememberMe"> Keep me logged in on this device</label>
+            <button class="btn btn--primary btn--block" type="submit">Log in <svg th:replace="~{fragments/ui :: icon('arrow-right', '')}"></svg></button>
+        </form>
+        <p class="auth__switch">New to Eco Swape? <a class="link" th:href="@{/register}">Create a free account</a></p>
+    </section>
+        <div class="auth__art" aria-hidden="true">
+            <img th:src="@{/img/hero-scene.webp}" alt="">
+            <p class="auth__quote">Reuse today,<br>for a greener tomorrow</p>
+        </div>
+</main>
+</body>
+</html>

@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{layout/base :: layout(~{::title}, 'admin', 'admin/pending-users', ~{::main})}">
+<head><title>Pending registrations · Eco Swape Admin</title></head>
+<body>
+<main id="main" class="app-main">
+    <div class="page-head"><div><h1>Pending registrations</h1><p>Review new students before they can use Eco Swape. Oldest registrations first.</p></div></div>
+    <div class="toolbar">
+        <div class="input-wrap"><svg th:replace="~{fragments/ui :: icon('search', '')}"></svg><label class="sr-only" for="q">Search</label><input class="input" id="q" type="search" maxlength="80" placeholder="Search name, e-mail or university"></div>
+    </div>
+    <div class="card"><div class="table-wrap" id="rows" aria-live="polite"></div></div>
+    <div id="pager"></div>
+</main>
+</body>
+</html>

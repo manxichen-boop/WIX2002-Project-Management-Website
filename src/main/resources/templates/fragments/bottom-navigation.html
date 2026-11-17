@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+<!--/* Student navigation for tablet and mobile (shown below 1060px). */-->
+<nav th:fragment="bottomNav" class="bottom-nav" aria-label="Student quick navigation">
+    <ul>
+        <li><a th:href="@{/dashboard}" th:classappend="${activeSection == 'dashboard'} ? 'is-active'"><svg th:replace="~{fragments/ui :: icon('layout-dashboard', '')}"></svg>Home</a></li>
+        <li><a th:href="@{/explore}" th:classappend="${activeSection == 'explore'} ? 'is-active'"><svg th:replace="~{fragments/ui :: icon('search', '')}"></svg>Explore</a></li>
+        <li><a class="bottom-nav__post" th:href="@{/items/new}" aria-label="Post an item"><svg th:replace="~{fragments/ui :: icon('plus', '')}"></svg></a></li>
+        <li><a th:href="@{/my/received-requests}" th:classappend="${activeSection == 'received' or activeSection == 'requests'} ? 'is-active'"><svg th:replace="~{fragments/ui :: icon('arrow-left-right', '')}"></svg>Requests<span class="badge-count" data-requests-dot th:if="${pendingRequestCount > 0}" th:text="${pendingRequestCount}">0</span></a></li>
+        <li><a th:href="@{/messages}" th:classappend="${activeSection == 'messages'} ? 'is-active'"><svg th:replace="~{fragments/ui :: icon('message-circle', '')}"></svg>Chats<span class="badge-count" data-messages-badge th:hidden="${unreadMessageCount == 0}" th:text="${unreadMessageCount}">0</span></a></li>
+    </ul>
+</nav>
+</body>
+</html>

@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{layout/base :: layout(~{::title}, 'admin', 'admin/support', ~{::main})}">
+<head><title>Support tickets · Eco Swape Admin</title></head>
+<body>
+<main id="main" class="app-main">
+    <div class="page-head"><div><h1>Support tickets</h1><p>Read student messages, reply and keep ticket statuses up to date.</p></div></div>
+    <div class="toolbar">
+        <div class="input-wrap"><svg th:replace="~{fragments/ui :: icon('search', '')}"></svg><label class="sr-only" for="q">Search</label><input class="input" id="q" type="search" maxlength="80" placeholder="Search subject, reference or student"></div>
+        <label class="sr-only" for="status">Status</label>
+        <select class="select" id="status"><option value="">All statuses</option><option value="OPEN">Open</option><option value="IN_PROGRESS">In progress</option><option value="WAITING_FOR_USER">Waiting for student</option><option value="RESOLVED">Resolved</option><option value="CLOSED">Closed</option></select>
+    </div>
+    <div class="card"><div class="table-wrap" id="rows" aria-live="polite"></div></div><div id="pager"></div>
+</main>
+</body>
+</html>

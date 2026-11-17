@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{layout/base :: layout(~{::title}, 'public', 'item-details', ~{::main})}">
+<head><title th:text="${item.name} + ' · Eco Swape'">Item · Eco Swape</title></head>
+<body>
+<main id="main" class="container page" th:attr="data-item-id=${item.id},data-listing-type=${item.listingType}">
+    <nav aria-label="Breadcrumb" class="text-sm text-secondary" style="margin-bottom:18px">
+        <a class="link" th:href="@{/explore}">Explore</a> ·
+        <a class="link" th:href="@{/explore(category=${item.categorySlug})}" th:text="${item.categoryName}">Books</a>
+    </nav>
+
+    <!-- Owner / admin see moderation state for listings that aren't public -->
+    <div class="alert" style="margin-bottom:20px"
+         th:if="${(item.viewer.owner or item.viewer.admin) and !(item.approvalStatus.name() == 'APPROVED' and item.availabilityStatus.name() == 'AVAILABLE')}"
+         th:classappend="${item.approvalStatus.name() == 'REJECTED' or item.approvalStatus.name() == 'SUSPENDED'} ? 'alert--danger' : 'alert--warning'">
+        <svg th:replace="~{fragments/ui :: icon('info', '')}"></svg>
+        <div>
+            <strong th:switch="${item.approvalStatus.name()}">
+                <th:block th:case="'PENDING_APPROVAL'">Waiting for administrator approval</th:block>
+                <th:block th:case="'REJECTED'">This listing was not approved</th:block>
+                <th:block th:case="'NEEDS_CHANGES'">Changes requested by an administrator</th:block>
+                <th:block th:case="'SUSPENDED'">This listing is suspended</th:block>
+                <th:block th:case="*" th:text="'This item is ' + ${#strings.toLowerCase(item.availabilityStatus.name())}">Status</th:block>
+            </strong>
+            <span th:if="${item.rejectionReason != null}" th:text="'Note: ' + ${item.rejectionReason}">Reason</span>
+            <span th:if="${item.viewer.owner and item.rejectionReason == null}">Only you can see this page until the listing is approved and available.</span>
+        </div>
+    </div>
+
+    <div class="item-detail">
+        <section class="gallery" aria-label="Photos">
+            <div class="gallery__main">
+                <img th:if="${!#lists.isEmpty(item.images)}" id="gallery-main" th:src="${item.images[0].url}" th:alt="${item.name}">
+                <div th:if="${#lists.isEmpty(item.images)}" class="photo-placeholder"><svg th:replace="~{fragments/ui :: icon('image-plus', '')}"></svg></div>
+            </div>
+            <div class="gallery__thumbs" th:if="${#lists.size(item.images) > 1}">
+                <button type="button" th:each="img, s : ${item.images}" th:attr="data-src=${img.url},aria-current=${s.first} ? 'true' : 'false',aria-label='Photo ' + ${s.count}">
+                    <img th:src="${img.url}" alt="" loading="lazy">
+                </button>
+            </div>
+        </section>
+
+        <section class="item-info" aria-labelledby="item-title">
+            <div class="cluster">
+                <span class="badge badge--plain" th:classappend="'badge--' + ${#strings.toLowerCase(item.listingType)}" th:text="${item.listingType.label()}">Swap</span>
+                <span class="badge badge--success" th:if="${item.availabilityStatus.name() == 'AVAILABLE' and item.approvalStatus.name() == 'APPROVED'}">Available</span>
+                <span class="badge badge--info" th:if="${item.availabilityStatus.name() == 'RESERVED'}">Reserved</span>
+                <span class="badge badge--neutral" th:if="${item.availabilityStatus.name() == 'COMPLETED'}">Exchanged</span>
+            </div>
+            <h1 id="item-title" th:text="${item.name}">Item name</h1>
+            <p class="item-info__desc" th:text="${item.description}">Description</p>
+
+            <div class="item-facts">
+                <div class="fact"><span>Category</span><strong th:text="${item.categoryName}">Books</strong></div>
+                <div class="fact"><span>Condition</span><strong th:text="${item.conditionLabel}">Good</strong></div>
+                <div class="fact"><span>Pickup location</span><strong th:text="${item.pickupLocation}">Library</strong></div>
+                <div class="fact"><span>Posted</span><strong th:attr="data-date=${item.createdAt}">—</strong></div>
+                <div class="fact" th:if="${item.approximateWeight != null}"><span>Approx. weight</span><strong th:text="${item.approximateWeight} + ' kg'">1 kg</strong></div>
+                <div class="fact"><span>Listing type</span><strong th:text="${item.listingType.name() == 'SWAP'} ? 'Swap for one of your items' : (${item.listingType.name() == 'GIVEAWAY'} ? 'Free giveaway' : 'Upcycling material')">Swap</strong></div>
+            </div>
+
+            <div class="card owner-card">
+                <span class="avatar">
+                    <img th:if="${item.owner.avatarUrl != null and currentUser != null}" th:src="${item.owner.avatarUrl}" alt="">
+                    <th:block th:unless="${item.owner.avatarUrl != null and currentUser != null}" th:text="${item.owner.initials}">AK</th:block>
+                </span>
+                <div>
+                    <strong th:text="${item.viewer.owner} ? 'You' : ${item.owner.firstName}">Aisha</strong>
+                    <span th:text="${item.owner.university}">Universiti Malaya</span>
+                </div>
+            </div>
+
+            <div class="item-actions" id="item-actions">
+                <th:block th:switch="${item.viewer.requestBlockedReason}">
+                    <button th:case="null" class="btn btn--primary btn--lg btn--block" type="button" data-request>
+                        <svg th:replace="~{fragments/ui :: icon('send', '')}"></svg>
+                        <span th:text="${item.listingType.name() == 'SWAP'} ? 'Request a swap' : 'Request this item'">Request</span>
+                    </button>
+                    <a th:case="'LOGIN_REQUIRED'" class="btn btn--primary btn--lg btn--block" th:href="@{/login(next='/items/' + ${item.id})}">Log in to request this item</a>
+                    <th:block th:case="'OWN_ITEM'">
+                        <a th:if="${item.availabilityStatus.name() == 'AVAILABLE' and item.approvalStatus.name() != 'SUSPENDED'}"
+                           class="btn btn--secondary btn--lg btn--block" th:href="@{/items/{id}/edit(id=${item.id})}">
+                            <svg th:replace="~{fragments/ui :: icon('pencil', '')}"></svg>Edit your listing</a>
+                        <a th:unless="${item.availabilityStatus.name() == 'AVAILABLE' and item.approvalStatus.name() != 'SUSPENDED'}"
+                           class="btn btn--secondary btn--lg btn--block" th:href="@{/my/listings}">View in My Listings</a>
+                    </th:block>
+                    <th:block th:case="'ALREADY_REQUESTED'">
+                        <a th:if="${item.viewer.activeRequestStatus == 'ACCEPTED'}" class="btn btn--primary btn--lg btn--block"
+                           th:href="@{/messages/{id}(id=${item.viewer.activeRequestId})}">
+                            <svg th:replace="~{fragments/ui :: icon('message-circle', '')}"></svg>Chat with the owner</a>
+                        <a class="btn btn--secondary btn--lg btn--block" th:href="@{/my/requests}">
+                            <svg th:replace="~{fragments/ui :: icon('check', '')}"></svg>
+                            <span th:text="${item.viewer.activeRequestStatus == 'ACCEPTED'} ? 'Request accepted. View it' : 'Requested. Waiting for the owner'">Requested</span></a>
+                    </th:block>
+                    <a th:case="'ADMIN'" class="btn btn--dark btn--lg btn--block" th:href="@{/admin/listings(q=${item.name})}">
+                        <svg th:replace="~{fragments/ui :: icon('shield-check', '')}"></svg>Moderate in admin</a>
+                    <p th:case="*" class="alert alert--info"><svg th:replace="~{fragments/ui :: icon('info', '')}"></svg>
+                        <span th:text="${item.availabilityStatus.name() == 'COMPLETED'} ? 'This item has already found a new home.' : (${item.availabilityStatus.name() == 'RESERVED'} ? 'This item is reserved for an accepted exchange.' : 'This item is not available to request right now.')">Not available</span></p>
+                </th:block>
+                <div class="item-actions__row" th:if="${item.viewer.loggedIn and !item.viewer.owner and !item.viewer.admin}">
+                    <button class="btn btn--secondary" type="button" th:attr="data-save=${item.id},aria-pressed=${item.viewer.saved}"
+                            th:aria-label="${item.viewer.saved} ? 'Remove from saved' : 'Save item'">
+                        <svg th:replace="~{fragments/ui :: icon('heart', '')}"></svg><span data-save-label th:text="${item.viewer.saved} ? 'Saved' : 'Save'">Save</span></button>
+                    <button class="btn btn--danger" type="button" data-report><svg th:replace="~{fragments/ui :: icon('flag', '')}"></svg>Report</button>
+                </div>
+            </div>
+            <p class="text-xs text-secondary">Eco Swape is free: nothing here is ever bought or sold. Meet in a public place on campus.</p>
+        </section>
+    </div>
+
+    <!-- Pickup point: map + distance from the visitor (item-details.js) -->
+    <section class="pickup-card" aria-labelledby="pickup-title"
+             th:attr="data-lat=${item.pickupLatitude},data-lng=${item.pickupLongitude},data-icon=${item.categoryIconKey},data-place=${item.pickupLocation}">
+        <div class="pickup-card__info">
+            <span class="pill pill--soft"><svg th:replace="~{fragments/ui :: icon('map-pin', '')}"></svg>Pickup point</span>
+            <h2 id="pickup-title" th:text="${item.pickupLocation}">Main library entrance</h2>
+            <th:block th:if="${item.pickupLatitude != null}">
+                <div class="pickup-stats">
+                    <div class="pickup-stat"><svg th:replace="~{fragments/ui :: icon('route', '')}"></svg>
+                        <div><strong data-distance>—</strong><span>Distance from you</span></div></div>
+                    <div class="pickup-stat"><svg th:replace="~{fragments/ui :: icon('footprints', '')}"></svg>
+                        <div><strong data-walk>—</strong><span>Approximate walk</span></div></div>
+                </div>
+                <p class="text-xs text-secondary" data-distance-note>Share your location to see how far the pickup point is. It stays in your browser and is never saved.</p>
+                <div class="cluster">
+                    <button class="btn btn--primary" type="button" data-locate><svg th:replace="~{fragments/ui :: icon('locate-fixed', '')}"></svg>Show distance from me</button>
+                    <a class="btn btn--secondary" target="_blank" rel="noopener" data-directions
+                       th:href="'https://www.google.com/maps/dir/?api=1&destination=' + ${item.pickupLatitude} + ',' + ${item.pickupLongitude} + '&travelmode=walking'">
+                        <svg th:replace="~{fragments/ui :: icon('navigation', '')}"></svg>Walking directions</a>
+                </div>
+            </th:block>
+            <p th:if="${item.pickupLatitude == null}" class="text-secondary">The owner described the pickup spot in words but didn't pin it on the map.
+                After your request is accepted you can agree on the exact place in the chat.</p>
+        </div>
+        <div class="map-frame map-frame--detail" id="item-map" th:if="${item.pickupLatitude != null}" aria-label="Map of the pickup point"></div>
+    </section>
+</main>
+</body>
+</html>

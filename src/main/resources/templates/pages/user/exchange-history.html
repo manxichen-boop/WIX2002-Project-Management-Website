@@ -1,0 +1,11 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{layout/base :: layout(~{::title}, 'user', 'exchange-history', ~{::main})}">
+<head><title>Exchange history · Eco Swape</title></head>
+<body>
+<main id="main" class="app-main">
+    <div class="page-head"><div><h1>Exchange history</h1><p>Accepted and completed exchanges, as owner or requester.</p></div></div>
+    <div class="request-list" id="rows" aria-live="polite"></div><div id="pager"></div>
+</main>
+</body>
+</html>

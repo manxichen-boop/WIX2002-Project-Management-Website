@@ -1,0 +1,23 @@
+CREATE TABLE reports (
+    report_id         BIGINT         NOT NULL AUTO_INCREMENT,
+    reporter_id       BIGINT         NOT NULL,
+    reported_user_id  BIGINT         NULL,
+    item_id           BIGINT         NULL,
+    reason            VARCHAR(40)    NOT NULL,
+    description       VARCHAR(1000)  NULL,
+    status            VARCHAR(20)    NOT NULL DEFAULT 'OPEN',
+    reviewed_by       BIGINT         NULL,
+    resolution_notes  VARCHAR(1000)  NULL,
+    created_at        DATETIME(6)    NOT NULL DEFAULT CURRENT_TIMESTAMP(6),
+    updated_at        DATETIME(6)    NOT NULL DEFAULT CURRENT_TIMESTAMP(6) ON UPDATE CURRENT_TIMESTAMP(6),
+    PRIMARY KEY (report_id),
+    CONSTRAINT fk_reports_reporter FOREIGN KEY (reporter_id)      REFERENCES users (user_id),
+    CONSTRAINT fk_reports_user     FOREIGN KEY (reported_user_id) REFERENCES users (user_id),
+    CONSTRAINT fk_reports_item     FOREIGN KEY (item_id)          REFERENCES items (item_id),
+    CONSTRAINT fk_reports_reviewer FOREIGN KEY (reviewed_by)      REFERENCES users (user_id),
+    CONSTRAINT ck_reports_target CHECK (reported_user_id IS NOT NULL OR item_id IS NOT NULL),
+    CONSTRAINT ck_reports_reason CHECK (reason IN ('INAPPROPRIATE_LISTING', 'MISLEADING_DESCRIPTION', 'SUSPICIOUS_USER',
+                                                   'PROHIBITED_CONTENT', 'INAPPROPRIATE_BEHAVIOUR', 'OTHER')),
+    CONSTRAINT ck_reports_status CHECK (status IN ('OPEN', 'UNDER_REVIEW', 'RESOLVED', 'DISMISSED')),
+    INDEX idx_reports_status_created (status, created_at)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;

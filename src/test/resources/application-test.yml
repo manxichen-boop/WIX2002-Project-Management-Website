@@ -1,0 +1,21 @@
+# Integration tests run against a real MySQL 8 database (default: local ecoswap_test).
+spring:
+  datasource:
+    url: ${TEST_DB_URL:jdbc:mysql://localhost:3306/ecoswap_test?serverTimezone=UTC&characterEncoding=utf8&useSSL=false&allowPublicKeyRetrieval=true}
+    username: ${TEST_DB_USERNAME:ecoswap}
+    password: ${TEST_DB_PASSWORD:${DB_PASSWORD}}
+  flyway:
+    clean-disabled: false
+  thymeleaf:
+    cache: false
+
+ecoswap:
+  storage:
+    local-dir: ${java.io.tmpdir}/ecoswap-test-storage
+  auth:
+    remember-me-key: test-only-remember-me-key
+    max-login-attempts: 50
+
+logging:
+  level:
+    com.ecoswap: INFO

@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{layout/base :: layout(~{::title}, 'user', 'support', ~{::main})}">
+<head><title>Help &amp; support · Eco Swape</title></head>
+<body>
+<main id="main" class="app-main">
+    <div class="page-head"><div><h1>Help &amp; support</h1><p>Find quick answers, or send the Eco Swape team a message. We reply on working days.</p></div></div>
+
+    <section aria-labelledby="faq-title" style="margin-bottom:26px">
+        <h2 id="faq-title" style="font-size:var(--text-xl);margin-bottom:12px">Frequently asked questions</h2>
+        <div class="accordion">
+            <details><summary>Why isn't my listing visible in Explore yet?<svg th:replace="~{fragments/ui :: icon('chevron-down', '')}"></svg></summary>
+                <div>Every new listing is checked by an administrator first, usually within one working day. You can see its status under My Listings. If changes are requested, edit the listing and it is automatically resubmitted.</div></details>
+            <details><summary>Can I sell items on Eco Swape?<svg th:replace="~{fragments/ui :: icon('chevron-down', '')}"></svg></summary>
+                <div>No. Eco Swape is completely free: items are swapped, given away or shared for upcycling. Listings that ask for money are removed.</div></details>
+            <details><summary>How does a swap work?<svg th:replace="~{fragments/ui :: icon('chevron-down', '')}"></svg></summary>
+                <div>Request the item and choose one of your own approved items to offer. If the owner accepts, both items are reserved, you can see each other's e-mail, and you meet at the pickup location. Both of you then confirm the handover to complete the exchange.</div></details>
+            <details><summary>What if the other student doesn't show up?<svg th:replace="~{fragments/ui :: icon('chevron-down', '')}"></svg></summary>
+                <div>Use "Withdraw" on the accepted exchange and give a short reason. The items become available again. If something felt wrong, report the student and our team will look into it.</div></details>
+            <details><summary>Who can see my e-mail address?<svg th:replace="~{fragments/ui :: icon('chevron-down', '')}"></svg></summary>
+                <div>Only the other student in an accepted exchange, so you can arrange the handover, and the administrators.</div></details>
+        </div>
+        <p class="text-sm text-secondary" style="margin-top:12px">Contact: write to us below. Urgent safety issue on campus? Contact campus security first.</p>
+    </section>
+
+    <div class="support-layout">
+        <form class="card card--pad form" id="ticket-form" novalidate>
+            <h2 style="font-size:var(--text-lg)">Submit a support ticket</h2>
+            <div class="alert alert--danger" data-form-error hidden role="alert"></div>
+            <div class="field"><label for="subject">Subject</label>
+                <input class="input" id="subject" name="subject" maxlength="150" required placeholder="e.g. I can't upload photos"></div>
+            <div class="field"><label for="message">Describe the issue</label>
+                <textarea class="textarea" id="message" name="message" maxlength="4000" required></textarea></div>
+            <div class="field"><label for="attachment">Attachment <span class="optional">(optional · image or PDF up to 5 MB)</span></label>
+                <input class="input" id="attachment" name="attachment" type="file" accept="image/jpeg,image/png,image/webp,application/pdf"></div>
+            <button class="btn btn--primary" type="submit"><svg th:replace="~{fragments/ui :: icon('send', '')}"></svg>Send to support</button>
+        </form>
+        <section class="card card--pad" aria-labelledby="tickets-title">
+            <h2 id="tickets-title" style="font-size:var(--text-lg);margin-bottom:12px">Your tickets</h2>
+            <div class="ticket-list" id="tickets" aria-live="polite"></div>
+            <div id="pager"></div>
+        </section>
+    </div>
+</main>
+</body>
+</html>

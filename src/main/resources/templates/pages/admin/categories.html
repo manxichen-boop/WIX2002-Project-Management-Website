@@ -1,0 +1,11 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{layout/base :: layout(~{::title}, 'admin', 'admin/categories', ~{::main})}">
+<head><title>Categories · Eco Swape Admin</title></head>
+<body>
+<main id="main" class="app-main">
+    <div class="page-head"><div><h1>Categories</h1><p>Add, edit or deactivate categories. Categories that listings use can't be deleted.</p></div><div class="page-head__actions"><button class="btn btn--primary" type="button" data-new><svg th:replace="~{fragments/ui :: icon('plus', '')}"></svg>New category</button></div></div>
+    <div class="card"><div class="table-wrap" id="rows" aria-live="polite"></div></div>
+</main>
+</body>
+</html>

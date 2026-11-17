@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{layout/base :: layout(~{::title}, 'public', 'home', ~{::main})}">
+<head><title>Eco Swape · Swap, Reuse and Reimagine on Campus</title></head>
+<body>
+<main id="main" class="home">
+
+    <img class="leaf leaf--tl" th:src="@{/img/leaf-tl.webp}" alt="" aria-hidden="true">
+    <img class="leaf leaf--r"  th:src="@{/img/leaf-r.webp}"  alt="" aria-hidden="true">
+    <img class="leaf leaf--bl" th:src="@{/img/leaf-bl.webp}" alt="" aria-hidden="true">
+
+    <!-- ===================== HERO ===================== -->
+    <section class="hero container" aria-labelledby="hero-title">
+        <div class="hero__copy">
+            <span class="pill reveal"><svg th:replace="~{fragments/ui :: icon('users-round', '')}"></svg>Campus Community Exchange</span>
+            <h1 id="hero-title" class="hero__title reveal">
+                <svg class="hero__spark" viewBox="0 0 60 50" aria-hidden="true">
+                    <path d="M8 22 4 6" stroke="#438B25" stroke-width="4.5" stroke-linecap="round"/>
+                    <path d="M22 18 40 2" stroke="#438B25" stroke-width="4.5" stroke-linecap="round"/>
+                    <path d="M26 34 52 26" stroke="#D77D61" stroke-width="4.5" stroke-linecap="round"/>
+                </svg>
+                Swap, Reuse<br>
+                and <span class="hero__accent">Reimagine<svg class="hero__swash" viewBox="0 0 300 24" preserveAspectRatio="none" aria-hidden="true"><path d="M4 18C70 6 170 2 296 10" fill="none" stroke="#438B25" stroke-width="5" stroke-linecap="round"/></svg></span>
+            </h1>
+            <p class="hero__lead reveal">Give pre-loved items a new life, reduce waste, and build a more sustainable campus together.</p>
+            <div class="hero__actions reveal">
+                <a class="btn btn--primary btn--lg" th:href="@{/explore}">Start Swapping<svg th:replace="~{fragments/ui :: icon('arrow-right', '')}"></svg></a>
+                <a class="btn btn--secondary btn--lg" href="#how-it-works"><svg th:replace="~{fragments/ui :: icon('circle-play', 'icon--play')}"></svg>How It Works</a>
+            </div>
+        </div>
+
+        <div class="hero__art">
+            <img class="hero__scene" th:src="@{/img/hero-scene.webp}" width="860" height="625" fetchpriority="high"
+                 alt="A cosy corner of reused goods: green armchair, plants, clothing rail, books, backpack, camera, sneakers and a recycling box">
+            <!--/* Main five categories. "More" rotates them around the circle to reveal the remaining categories (home.js);
+                 without JavaScript it simply opens Explore. */-->
+            <th:block th:each="c, s : ${navCategories}"
+                      th:if="${ {'books','clothing','electronics','furniture','accessories'}.contains(c.iconKey) }">
+                <a class="cat-chip cat-chip--main" th:classappend="'cat-chip--' + ${c.iconKey}" th:href="@{/explore(category=${c.slug})}"
+                   th:style="'--d:' + ${s.index * 90} + 'ms'">
+                    <img th:src="@{/img/categories/{k}.webp(k=${c.iconKey})}" alt=""><span th:text="${c.name}">Books</span>
+                </a>
+            </th:block>
+            <th:block th:with="extra=${navCategories.?[!{'books','clothing','electronics','furniture','accessories'}.contains(iconKey)]}">
+                <a class="cat-chip cat-chip--alt" th:each="c, s : ${extra}" th:if="${s.index < 5}"
+                   th:classappend="'cat-chip--slot' + ${s.count}" th:href="@{/explore(category=${c.slug})}"
+                   th:style="'--i:' + ${s.index}" tabindex="-1" aria-hidden="true" data-chip-alt>
+                    <img th:src="@{/img/categories/{k}.webp(k=${c.iconKey})}" alt=""><span th:text="${c.name}">Stationery</span>
+                </a>
+            </th:block>
+            <a class="cat-chip cat-chip--more" th:href="@{/explore}" style="--d:450ms" data-chip-more
+               aria-label="Show more categories" aria-expanded="false">
+                <span class="cat-chip__face cat-chip__face--more"><img th:src="@{/img/categories/more.webp}" alt=""><span>More</span></span>
+                <span class="cat-chip__face cat-chip__face--back"><img class="cat-chip__arrow" th:src="@{/img/categories/arrow.webp}" alt=""><span>Back</span></span>
+            </a>
+        </div>
+    </section>
+
+    <!-- ===================== LIVE STATISTICS ===================== -->
+    <section class="stats container" aria-label="Community impact, live from the Eco Swape database">
+        <ul class="stats__bar">
+            <li class="stat">
+                <svg th:replace="~{fragments/ui :: icon('users-round', 'stat__icon')}"></svg>
+                <div><strong class="stat__value" th:text="${#numbers.formatInteger(impact.communityMembers, 1, 'COMMA')}">0</strong><span class="stat__label">Community Members</span></div>
+            </li>
+            <li class="stat">
+                <svg th:replace="~{fragments/ui :: icon('arrow-left-right', 'stat__icon')}"></svg>
+                <div><strong class="stat__value" th:text="${#numbers.formatInteger(impact.completedExchanges, 1, 'COMMA')}">0</strong><span class="stat__label">Completed Exchanges</span></div>
+            </li>
+            <li class="stat">
+                <svg th:replace="~{fragments/ui :: icon('recycle', 'stat__icon')}"></svg>
+                <div><strong class="stat__value" th:text="${#numbers.formatInteger(impact.itemsReused, 1, 'COMMA')}">0</strong><span class="stat__label">Items Reused</span></div>
+            </li>
+            <li class="stat">
+                <svg th:replace="~{fragments/ui :: icon('leaf', 'stat__icon')}"></svg>
+                <div><strong class="stat__value" th:text="${#numbers.formatDecimal(impact.reusedWeightKg, 1, 'COMMA', 1, 'POINT')} + ' kg'">0.0 kg</strong><span class="stat__label">Recorded Weight Reused</span></div>
+            </li>
+        </ul>
+        <p class="stats__note">Live figures from completed exchanges. <a class="link" th:href="@{/impact}">How we count</a></p>
+    </section>
+
+    <!-- ===================== CAMPUS LANDSCAPE ===================== -->
+    <section class="landscape" aria-label="Reuse Today for a Greener Tomorrow">
+        <p class="landscape__script">Reuse Today<br>for a Greener Tomorrow
+            <svg viewBox="0 0 160 14" preserveAspectRatio="none" aria-hidden="true"><path d="M2 11C50 4 110 2 158 3" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"/></svg>
+        </p>
+        <img th:src="@{/img/landscape.webp}" alt="" aria-hidden="true" loading="lazy">
+    </section>
+
+    <!-- ===================== FEATURED ITEMS ===================== -->
+    <section class="home-section home-section--tint" aria-labelledby="featured-title">
+        <div class="container">
+            <div class="section-head">
+                <div>
+                    <span class="eyebrow">Featured items</span>
+                    <h2 id="featured-title" class="section-title">Fresh on the exchange</h2>
+                    <p class="section-lead">The newest approved listings from students on campus.</p>
+                </div>
+                <a class="btn btn--secondary" th:href="@{/explore}">Explore all items<svg th:replace="~{fragments/ui :: icon('arrow-right', '')}"></svg></a>
+            </div>
+
+            <div class="item-grid" th:unless="${#lists.isEmpty(featuredItems)}">
+                <article class="item-card" th:each="item : ${featuredItems}">
+                    <div class="item-card__media">
+                        <img th:if="${item.coverUrl != null}" th:src="${item.coverUrl}" th:alt="${item.name}" loading="lazy">
+                        <div th:unless="${item.coverUrl != null}" class="photo-placeholder" role="img" aria-label="No photo"><svg th:replace="~{fragments/ui :: icon('image-plus', '')}"></svg></div>
+                        <span class="item-card__type badge badge--plain" th:classappend="'badge--' + ${#strings.toLowerCase(item.listingType)}" th:text="${item.listingType.label()}">Swap</span>
+                    </div>
+                    <div class="item-card__body">
+                        <h3 class="item-card__title"><a th:href="@{/items/{id}(id=${item.id})}" th:text="${item.name}">Item</a></h3>
+                        <p class="item-card__meta"><svg th:replace="~{fragments/ui :: icon('tag', '')}"></svg><span th:text="${item.categoryName} + ' · ' + ${item.conditionLabel}">Books · Good</span></p>
+                        <p class="item-card__meta"><svg th:replace="~{fragments/ui :: icon('map-pin', '')}"></svg><span th:text="${item.pickupLocation}">Library</span></p>
+                    </div>
+                </article>
+            </div>
+
+            <div class="card" th:if="${#lists.isEmpty(featuredItems)}">
+                <div class="state">
+                    <span class="state__icon"><svg th:replace="~{fragments/ui :: icon('sprout', '')}"></svg></span>
+                    <h3>The exchange is just getting started</h3>
+                    <p>No listings have been approved yet. Be one of the first to give something a second life.</p>
+                    <a class="btn btn--primary" th:href="${currentUser == null} ? @{/register} : @{/items/new}"
+                       th:text="${currentUser == null} ? 'Join Eco Swape' : 'Post your first item'">Join Eco Swape</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===================== POPULAR CATEGORIES ===================== -->
+    <section class="home-section" aria-labelledby="categories-title">
+        <div class="container">
+            <div class="section-head">
+                <div>
+                    <span class="eyebrow">Popular categories</span>
+                    <h2 id="categories-title" class="section-title">Find what your semester needs</h2>
+                </div>
+            </div>
+            <div class="category-grid">
+                <a class="category-tile" th:each="c : ${navCategories}" th:href="@{/explore(category=${c.slug})}">
+                    <img th:src="@{/img/categories/{k}.webp(k=${c.iconKey})}" alt="">
+                    <div>
+                        <strong th:text="${c.name}">Books</strong>
+                        <span th:with="n=${categoryCounts.get(c.id) ?: 0}"
+                              th:text="${n == 1} ? '1 item available' : ${n} + ' items available'">0 items available</span>
+                    </div>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===================== HOW IT WORKS ===================== -->
+    <section id="how-it-works" class="home-section home-section--tint" aria-labelledby="how-title">
+        <div class="container">
+            <div class="section-head">
+                <div>
+                    <span class="eyebrow">How Eco Swape works</span>
+                    <h2 id="how-title" class="section-title">From your shelf to someone's next favourite thing</h2>
+                    <p class="section-lead">Every account and every listing is checked by our campus team, so the exchange stays safe and trustworthy. It's always free.</p>
+                </div>
+                <a class="btn btn--secondary" th:href="@{/how-it-works}">Read the full guide</a>
+            </div>
+            <ol class="steps">
+                <li class="step"><span class="step__num">01</span><span class="step__icon"><svg th:replace="~{fragments/ui :: icon('user-plus', '')}"></svg></span>
+                    <h3>Join with your university e-mail</h3><p>Register in a minute. An admin approves new accounts to keep the community campus-only.</p></li>
+                <li class="step"><span class="step__num">02</span><span class="step__icon"><svg th:replace="~{fragments/ui :: icon('package-plus', '')}"></svg></span>
+                    <h3>List what you no longer need</h3><p>Add photos, condition and a pickup spot. Listings go live once they're approved.</p></li>
+                <li class="step"><span class="step__num">03</span><span class="step__icon"><svg th:replace="~{fragments/ui :: icon('arrow-left-right', '')}"></svg></span>
+                    <h3>Request and agree</h3><p>Ask for an item, offering one of yours for a swap. The owner accepts or declines.</p></li>
+                <li class="step"><span class="step__num">04</span><span class="step__icon"><svg th:replace="~{fragments/ui :: icon('handshake', '')}"></svg></span>
+                    <h3>Meet on campus</h3><p>Hand over at the pickup spot, then both confirm. The swap counts towards campus impact.</p></li>
+            </ol>
+            <div class="listing-types">
+                <div class="listing-type"><svg th:replace="~{fragments/ui :: icon('repeat', '')}"></svg><div><strong>Swap</strong><p>Trade an item for one of yours.</p></div></div>
+                <div class="listing-type"><svg th:replace="~{fragments/ui :: icon('gift', '')}"></svg><div><strong>Giveaway</strong><p>Pass something on for free, nothing expected back.</p></div></div>
+                <div class="listing-type"><svg th:replace="~{fragments/ui :: icon('recycle', '')}"></svg><div><strong>Upcycling</strong><p>Share cardboard, glass, fabric and more for creative projects.</p></div></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===================== COMMUNITY ACTIVITY ===================== -->
+    <section class="home-section home-section--deep" aria-labelledby="community-title">
+        <div class="container community-grid">
+            <div>
+                <span class="eyebrow">Community activity</span>
+                <h2 id="community-title" class="section-title">Things are changing hands across campus</h2>
+                <p class="section-lead">Recent completed exchanges. We never show who swapped with whom, only what found a new home.</p>
+                <a class="btn btn--lime" th:href="@{/community}" style="margin-top:24px">Visit the community</a>
+            </div>
+            <div>
+                <ul class="activity-list" th:unless="${#lists.isEmpty(recentExchanges)}">
+                    <li class="activity" th:each="a : ${recentExchanges}">
+                        <span class="activity__icon"><svg th:replace="~{fragments/ui :: icon('handshake', '')}"></svg></span>
+                        <div>
+                            <strong th:text="${a.itemName}">Item</strong>
+                            <span><th:block th:text="${a.listingType} + ' · ' + ${a.categoryName} + ' · '"></th:block><time th:attr="data-relative=${a.at}" th:datetime="${a.at}"></time></span>
+                        </div>
+                    </li>
+                </ul>
+                <div class="state" th:if="${#lists.isEmpty(recentExchanges)}">
+                    <span class="state__icon"><svg th:replace="~{fragments/ui :: icon('handshake', '')}"></svg></span>
+                    <h3>No completed exchanges yet</h3>
+                    <p>When students complete their first swaps and giveaways, they'll appear here.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===================== SUSTAINABILITY IMPACT ===================== -->
+    <section class="home-section" aria-labelledby="impact-title">
+        <div class="container">
+            <div class="impact-band">
+                <div>
+                    <span class="eyebrow">Sustainability impact</span>
+                    <h2 id="impact-title" class="section-title">Every exchange keeps something out of the bin</h2>
+                    <p class="section-lead">We only report what we can verify: completed exchanges and the weights students recorded for their items. No guesswork.</p>
+                    <a class="btn btn--dark" th:href="@{/impact}" style="margin-top:22px">See our impact methodology</a>
+                </div>
+                <div class="impact-figures">
+                    <div class="impact-figure"><strong th:text="${#numbers.formatInteger(impact.availableListings, 1, 'COMMA')}">0</strong><span>items available now</span></div>
+                    <div class="impact-figure"><strong th:text="${#numbers.formatInteger(impact.itemsReused, 1, 'COMMA')}">0</strong><span>items given a second life</span></div>
+                    <div class="impact-figure"><strong th:text="${#numbers.formatDecimal(impact.reusedWeightKg, 1, 'COMMA', 1, 'POINT')} + ' kg'">0 kg</strong><span>recorded weight reused</span></div>
+                    <div class="impact-figure"><strong th:text="${#numbers.formatInteger(impact.communityMembers, 1, 'COMMA')}">0</strong><span>approved students</span></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===================== FINAL CALL TO ACTION ===================== -->
+    <section class="home-section" style="padding-top:0" aria-labelledby="cta-title">
+        <div class="container">
+            <div class="cta">
+                <div>
+                    <h2 id="cta-title">Your old things could be someone's new favourites.</h2>
+                    <p>Join the free campus exchange. No buying, no selling, just students helping students reuse more.</p>
+                </div>
+                <div class="cta__actions">
+                    <a th:if="${currentUser == null}" class="btn btn--lime btn--lg" th:href="@{/register}">Join Eco Swape</a>
+                    <a th:if="${currentUser != null and !currentUser.admin}" class="btn btn--lime btn--lg" th:href="@{/items/new}">Post an item</a>
+                    <a class="btn btn--secondary btn--lg" th:href="@{/explore}">Explore items</a>
+                </div>
+            </div>
+        </div>
+    </section>
+</main>
+</body>
+</html>

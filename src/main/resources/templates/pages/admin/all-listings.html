@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{layout/base :: layout(~{::title}, 'admin', 'admin/all-listings', ~{::main})}">
+<head><title>All listings · Eco Swape Admin</title></head>
+<body>
+<main id="main" class="app-main">
+    <div class="page-head"><div><h1>All listings</h1><p>Every listing on the platform, including hidden ones. Suspend or archive anything inappropriate.</p></div></div>
+    <div class="toolbar">
+        <div class="input-wrap"><svg th:replace="~{fragments/ui :: icon('search', '')}"></svg><label class="sr-only" for="q">Search</label><input class="input" id="q" type="search" maxlength="80" placeholder="Search item name or owner"></div>
+        <label class="sr-only" for="approval">Approval</label>
+        <select class="select" id="approval"><option value="">Any approval status</option><option value="PENDING_APPROVAL">Pending</option><option value="APPROVED">Approved</option><option value="REJECTED">Rejected</option><option value="NEEDS_CHANGES">Needs changes</option><option value="SUSPENDED">Suspended</option></select>
+        <label class="sr-only" for="availability">Availability</label>
+        <select class="select" id="availability"><option value="">Any availability</option><option value="AVAILABLE">Available</option><option value="RESERVED">Reserved</option><option value="COMPLETED">Completed</option><option value="ARCHIVED">Archived</option></select>
+    </div>
+    <div class="card"><div class="table-wrap" id="rows" aria-live="polite"></div></div>
+    <div id="pager"></div>
+</main>
+</body>
+</html>
